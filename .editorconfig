@@ -1,0 +1,5 @@
+[**/*.{scss,sass}]
+indent_size = 4
+charset = utf-8
+indent_style = tab
+quote_type = double

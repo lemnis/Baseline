@@ -1,0 +1,179 @@
+@import "base/utilities";
+@import "base/settings";
+@import "base/_validate";
+@import "base/_parse";
+
+// _base-calc-cap-height
+/// Calculates the cap-height of given font-size in used unit
+///
+/// @access private
+///
+/// @param {Number} $font-size    - Used font-size
+/// @param {Map}    $settings     - Map of element settings
+// @function _base-calc-cap-height($font-size, $settings){
+//     $cap-height: _base-settings-get("cap-height", $settings);
+//
+//     @return $cap-height * $font-size;
+// }
+
+@function _base-row-height($rows, $settings){
+    $row-height: _base-settings-get("row-height", $settings);
+    $s-font-size: _base-settings-get("font-size", $settings);
+
+    @return $rows * $row-height * $s-font-size;
+}
+
+@function _base-row-number($font-size, $add-line-height, $settings){
+    $row-height: _base-row-height(1, $settings);
+
+    // calculate minimum amount of rows given by the font-size
+    // -> the desired font-size divided by set row height rounded upwards
+    $rows-font-size: ceil(($font-size + 0.00001) / $row-height);
+    $total-rows: $rows-font-size + $add-line-height;
+
+    // calculate minimum amount of rows given by the minimum line-height
+    $rows-line-height: ceil((_base-settings-get("min-line-height", $settings) * $font-size / _base-settings-get("font-size", $settings)));
+
+    @return if($rows-font-size < $rows-line-height, $rows-line-height, $rows-font-size);
+}
+
+@function _base-shoulder-top($font-size, $line-height, $settings){
+    $cap-height: _base-settings-get("cap-height", $settings);
+
+    @return ($line-height*$font-size - $cap-height*$font-size)/2;
+}
+
+@function _base-shoulder-bottom($font-size, $line-height, $settings){
+    $s-row-height: _base-row-height(1, $settings);
+    $e-shoulder-height: _base-shoulder-top($font-size, $line-height, $settings);
+
+    // Height in use, 1 row of text + top shoulder
+    $used-height: $line-height * $font-size + $e-shoulder-height;
+
+    // Row height minus the used height that overlaps less than 1 row (remainder)
+    @return $s-row-height - ($used-height % $s-row-height);
+}
+
+@import "base/_debug";
+
+// _base-line-height
+/// Calculates the line-height for a given amount of rows at a certain font-size
+///
+/// @access private
+@function _base-line-height($rows, $font-size, $settings){
+    @return _base-row-height($rows, $settings) / $font-size;
+}
+
+// // sample calculate height of 1 row in given font-size
+// @function _base-get-size($font-size, $settings: $base){
+//     @return _base-settings-get("font-size", $settings) / $font-size;
+// }
+//
+// @function base-cap($line-height, $settings: $base){
+//     $font-size: _base-settings-get("font-size", $settings);
+//     $cap-height: _base-settings-get("cap-height", $settings);
+//
+//     $offset: ($line-height - $cap-height * $font-size) / 2;
+//     @return ($line-height - _base-settings-get("cap-height", $settings)) / 2;
+// }
+//
+// @function base-cap-top($line-height, $settings: $base){
+//     @return base-cap($line-height, $settings) * 1rem;
+// }
+//
+// @function base-cap-bottom($font-size, $line-height, $settings: $base){
+//     @return _base-get-size($font-size, $settings) - base-cap($line-height, $settings) * 1em;
+// }
+
+@function _base-calc-text-values($element-map, $settings){
+    $font-size: map-get($element-map, "font-size");
+    $rows: _base-row-number($font-size, map-get($element-map, "add-line-height"), $settings);
+    $line-height: _base-line-height($rows, $font-size, $settings);
+
+    @return (
+        font-size: $font-size,
+        rows: $rows,
+        line-height: $line-height,
+        top: _base-shoulder-top($font-size, $line-height, $settings),
+        bottom: _base-shoulder-bottom($font-size, $line-height, $settings)
+    )
+};
+
+// Base Text
+/// Generates vertical rhythm for a text element
+///
+/// @access public
+/// @see _base-parse
+/// @param {list} $shorthand [$font-size 0 (0 padding) (0 padding)] -
+/// Shorthand expression to define the font-size, containing:
+/// - font-size (required)
+/// - increased line-height per row
+/// - `list` top spacing
+///     - `number` extra rows to add as whitespace
+///     - `string` method used (padding, margin or split)
+/// - `list` bottom spacing
+///     - `number` extra rows to add as whitespace
+///     - `string` method used (padding, margin or split)
+@mixin base-text($shorthand, $settings: $base){
+    $map: _base-parse($shorthand, $settings);
+    $text-values: _base-calc-text-values($map, $settings);
+    font-size: map-get($text-values, "font-size");
+    line-height: map-get($text-values, "line-height");
+
+    $e-top: map-get($map, "top");
+    $e-top-type: map-get($e-top, "type");
+    $e-top-extra-height: _base-row-height(map-get($e-top, "rows"), $settings);
+
+    @if $e-top-type == "margin" {
+        margin-top: map-get($text-values, "top") + $e-top-extra-height;
+    } @else if $e-top-type == "split" {
+        padding-top: map-get($text-values, "top");
+        @if($e-top-extra-height > 0){ margin-top: $e-top-extra-height; }
+    } @else if $e-top-type == "padding" {
+        padding-top: map-get($text-values, "top") + $e-top-extra-height;
+    }
+
+    $e-bottom: map-get($map, "bottom");
+    $e-bottom-type: map-get($e-bottom, "type");
+    $e-bottom-extra-height: _base-row-height(map-get($e-bottom, "rows"), $settings);
+
+    @if $e-bottom-type == "margin" {
+        margin-bottom: map-get($text-values, "bottom") + $e-bottom-extra-height;
+    } @else if $e-bottom-type == "split" {
+        padding-bottom: map-get($text-values, "bottom");
+        @if($e-bottom-extra-height > 0){ margin-bottom: $e-bottom-extra-height; }
+    } @else if $e-bottom-type == "padding" {
+        padding-bottom: map-get($text-values, "bottom") + $e-bottom-extra-height;
+    }
+}
+
+//  Base Image
+/// Used for elements that needs to keep their aspect-ratio
+/// @todo create image mixin
+@mixin base-image($aspect-ratio, $shorthand, $settings: $base){}
+
+//  Base rows
+/// Used to set height to all other elements
+///
+/// @access public
+/// @param {number} $rows              Desired height by amount of rows
+/// @param {string|false} $position    If nested inside text, the position within must be set
+// @function base-rows($rows, $position: false, $shorthand: false, $settings: $base){
+//     $height: $rows * _base-settings-get("row-height", $settings);
+//     @if($shorthand){
+//         $map: _base-parse($shorthand, $settings);
+//         $font-size: map-get($map, "font-size");
+//
+//         $rows: ceil(($font-size + 0.00001) / _base-settings-get("row-height", $settings));
+//         $line-height: $rows * _base-get-size($font-size, $settings);
+//         $top: base-cap-top($line-height, $settings);
+//         $bottom: base-cap-bottom($font-size, $line-height, $settings);
+//         @if($position == "top" or $position == "both"){
+//             $height: ($height - $top);
+//         }
+//         @if($position == "bottom" or $position == "both"){
+//             $height: ($height - $bottom);
+//         }
+//     }
+//     @return $height;
+// }

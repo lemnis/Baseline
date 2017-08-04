@@ -1,0 +1,20 @@
+// Base Grid
+/// Generates a debug image
+///
+/// @access public
+/// @group Debug
+/// @return {string} linear-gradient
+/// @example scss
+/// body{
+///     background-image: base-grid();
+/// }
+ @function base-grid($settings: $base){
+    $row-height: _base-row-height(1, $settings);
+
+    @return repeating-linear-gradient(to bottom,
+        transparent 0px,
+        transparent calc(#{$row-height} - 1px),
+        #0EF   calc(#{$row-height} - 1px),
+        #0EF   $row-height
+    );
+}

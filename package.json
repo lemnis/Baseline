@@ -1,0 +1,24 @@
+{
+  "name": "baseline",
+  "version": "0.1.0",
+  "description": "Sass power-tool to keep everything on the baseline",
+  "main": "scss/baseline.scss",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "gulp test"
+  },
+  "keywords": [
+    "grid",
+    "scss",
+    "baseline",
+    "layout",
+    "sass"
+  ],
+  "author": "Lisa Martens",
+  "license": "MIT",
+  "devDependencies": {
+    "sass-true": "^3.0.0-beta.1"
+  }
+}

@@ -1,0 +1,90 @@
+// Base Settings Tests
+// ===================
+
+
+// Base Settings
+// -------------
+@include test-module("Base Settings [function]") {
+	$base: (cap-height: 3) !global;
+
+	@include test("Default configuration") {
+		@include assert-equal(
+			_base-settings(),
+			map-merge($_base-settings-defaults, $base),
+			"Returns merged map of Base default config settings"
+		);
+	}
+
+	@include test("Configuration overrides") {
+		$override: ("font-size": 2em);
+
+		@include assert-equal(
+			_base-settings($override),
+			map-merge(map-merge($_base-settings-defaults, $override), $base),
+			"Returns merged map of Base defaults with custom overrides"
+		);
+	}
+
+	@include test("Multiple overrides") {
+		$override1: ("font-size": 3ex);
+		$override2: ("min-line-height": 2);
+
+		@include assert-equal(
+			_base-settings($override1, $override2),
+			map-merge(map-merge(map-merge($_base-settings-defaults, $override1), $override2), $base),
+			"Returns merged map of Base defaults with multiple overrides"
+		);
+	}
+
+	$base: () !global;
+
+	@include test("Missing cap-height error") {
+		@include assert-equal(
+			_base-settings(),
+			"ERROR [_base-settings] There is no cap-height set"
+		);
+	}
+}
+
+// Base Get
+// --------
+@include test-module("Base Get [function]") {
+	$base: (
+		"font-size": 20px,
+		"row-height": null,
+		"cap-height": 3
+	) !global;
+
+	@include test("Get value from user settings") {
+		@include assert-equal(
+			_base-settings-get("font-size"),
+			map-get($base, "font-size"),
+			"Base-get and map-get should return the same value"
+		);
+	}
+
+	@include test("Get falsey value from user settings") {
+		@include assert-equal(
+			_base-settings-get("row-height"),
+			map-get($base, "row-height"),
+			"Base-get and map-get should return the same value"
+		);
+	}
+
+	@include test("Get value from defaults") {
+		@include assert-equal(
+			_base-settings-get("min-line-height"),
+			map-get($_base-settings-defaults, "min-line-height"),
+			"Base-get and map-get should return the same value"
+		);
+	}
+
+	@include test("Unknown setting error") {
+			@include assert-equal(
+			_base-settings-get("wtf"),
+			"ERROR [_base-settings-get] There is no Base setting called `wtf`"
+		);
+	}
+
+	$base: () !global;
+}

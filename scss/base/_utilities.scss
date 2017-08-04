@@ -1,0 +1,49 @@
+// Base Utilities
+// ==============
+
+// Base Error Output Override
+/// Turn off error output for testing
+/// @group utilities
+/// @access private
+$_base-error-output-override: false !default;
+
+// Base Error
+/// Optionally return error messages without failing,
+/// as a way to test error cases
+///
+/// @group utilities
+/// @access private
+///
+/// @param {string} $message 	A useful error message, explaining the problem
+/// @param {string} $source 	The original source of the error for debugging
+/// @param {bool} $override [$_susy-error-output-override]
+///   							Optionally return the error rather than failing
+/// @return {string} 			Combined error with source and message
+/// @throws 					When `$override == false`
+@function _base-error($message, $source, $override: $_base-error-output-override) {
+	@if $override {
+		@return 'ERROR [#{$source}] #{$message}';
+ 	}
+
+  	@error '[#{$source}] #{$message}';
+}
+
+// Map add
+/// Adds a key to the map, if not yet set
+///
+///	@group utilities
+///	@access private
+///
+/// @param {map} 	$map	A map where the key-value pair should be added
+/// @param {string} $key 	Key to be added to the map
+/// @param {*} 		$value 	Value to be added to the map
+///
+/// @return {map} 	The updated map, with the new key-value pair
+/// @throw 			Duplicate key: ...
+@function _base-map-add($map, $key, $value){
+	@if map-has-key($map, $key){
+		@return _base-error("Duplicate key: [#{type-of($key)}] `#{$key}`", "_base-map-add");
+	}
+
+	@return map-merge($map, ($key: $value));
+}

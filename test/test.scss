@@ -1,0 +1,66 @@
+$_base-error-output-override: true;
+
+@import "./../node_modules/sass-true/sass/true";
+@import "./../scss/baseline";
+
+@import "parse";
+@import "settings";
+//
+// @include test-module("Base setting get [function]") {
+// 	@include test("Default configuration") {
+// 		$keys: map-keys($_base-settings-defaults);
+//
+// 		@each $key in $keys {
+// 			$expect: map-get($_base-settings-defaults, $key);
+// 			$actual: _base-settings-get($key, ());
+//
+// 			@include assert-equal($actual, $expect, "#{$key} should be given");
+// 		}
+// 	}
+// }
+//
+// @include test-module('Base parse [function]') {
+// 	@debug _base-parse(null, ());
+// 	@include test('Most basic settings') {
+// 		$actual:  map-get(_base-parse(null, ()), "font-size");
+// 		$expect: map-get($_base-settings-defaults, "font-size");
+//
+// 		@include assert-equal($actual, $expect, "Font-size should be copied");
+// 	}
+//
+// 	@include test("Get value from user settings") {
+// 		$map:  _base-parse(null, ());
+// 		$top-property-type: map-get(map-get($map, "top"), "type");
+//
+// 		@include assert-equal($top-property-type, "split", "Which property");
+// 	}
+//
+// 	// @include test('Most complicated setup') {
+// 	// 	$expect: (
+// 	// 		font-size: 2vmin,
+// 	// 		min-line-height: 2,
+// 	// 		row-height: 3,
+// 	// 		cap-height: 4
+// 	// 	);
+// 	// 	$actual: _base-parse(null, $expect);
+// 	//
+// 	// 	@each $item, $value in $expect {
+// 	// 		@debug $actual;
+// 	// 		@debug $item + " | " + $value + " | " + map-get($actual, $item);
+// 	// 		@include assert-equal(
+// 	// 			$value, map-get($actual, $item),
+// 	// 			"Values should be copied from settings map (#{$item})"
+// 	// 		);
+// 	// 	}
+// 	// }
+//
+//
+// 	// @include test('Simple grid span') {
+// 	// 	$expect: ('span': 5);
+// 	//
+// 	// 	@include assert-equal(
+// 	// 	susy-parse(5),
+// 	// 	$expect,
+// 	// 	'A single unitless number is returned as span only');
+// 	// }
+// }

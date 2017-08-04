@@ -1,0 +1,34 @@
+// // Base Tests
+// /// Simple tests to check against settings
+// ///
+// /// @access private
+// /// @group Helpers
+// /// @param {string} $test-name    Test to test
+// /// @param {*}      $value        Value(s) that are needed for the test
+// @function _base-test($test-name, $value: false, $map: $base){
+//     @if $test-name == "check-unit" {
+//         @if not $value{
+//             @error $value is not set;
+//         }
+//         @return comparable(_base-settings-get("font-size", $map), $value);
+//     } @else if $test-name == "check-settings"{
+//         @if not map-has-key($base, "cap-height"){
+//             @return false;
+//         }
+//         @return true;
+//     } @else {
+//         @warn "Test #{$test-name} not found";
+//         @return false;
+//     }
+// }
+
+@function _base-valid-unit($value, $map){
+    @return comparable(_base-settings-get("font-size", $map), $value);
+}
+
+@function _base-valid-settings($map){
+    @if not map-has-key($map, "cap-height"){
+        @return false;
+    }
+    @return true;
+}

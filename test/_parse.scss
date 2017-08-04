@@ -1,0 +1,275 @@
+// Base Parser Tests
+// =================
+
+
+// Base Parse
+// ----------
+@include test-module("Base Parse [function]") {
+	$base: (
+		cap-height: 3
+	) !global;
+
+	@include test("Simple text settings") {
+    	$expect: ("font-size": 3rem);
+
+	    @include assert-equal(
+			_base-parse(3rem),
+      		$expect,
+      		"A single unit number is returned as font-size"
+		);
+	}
+
+	@include test("Text settings with extra row height") {
+	    $expect: (
+	    	"font-size": 3rem,
+	    	"add-rows": 2,
+	    );
+
+		@include assert-equal(
+			_base-parse(3rem 2),
+			$expect,
+			"Font-size and add-rows columns are properly mapped"
+		);
+  	}
+
+	@include test("Text settings with extra top white-space") {
+    	$expect: (
+	  		"font-size": 3rem,
+      		"top": (
+	  			"rows": 4
+	  		)
+    	);
+
+    	@include assert-equal(
+      		_base-parse(3rem (top 4)),
+      		$expect,
+      		"Font-size and top are properly mapped"
+		);
+  	}
+
+	@include test("Text settings with extra top and bottom") {
+		$expect: (
+			"font-size": 3rem,
+			"top": (
+				"rows": 4,
+				"type": "margin",
+				"border": 1rem
+			),
+			"bottom": (
+				"rows": 2,
+				"type": "padding",
+			)
+		);
+
+		@include assert-equal(
+			_base-parse(3rem (top 4 margin 1rem) (bottom padding 2)),
+			$expect,
+			"font-size, top and bottom are properly mapped"
+		);
+	}
+
+	@include test("Unknown sub-list") {
+		@include assert-equal(
+			_base-parse(3rem (margin 4)),
+			"ERROR [_base-parse] No direction set in sublist: [list] `margin 4`"
+		);
+	}
+
+	@include test("Unknown string parsing error") {
+		@include assert-equal(
+			_base-parse(3 wtf),
+			"ERROR [_base-parse] Unknown shorthand property: [string] `wtf`"
+		);
+	}
+
+	@include test("Unknown number parsing error") {
+		@include assert-equal(
+			_base-parse(3 156),
+			"ERROR [_base-parse] Duplicate shorthand property: [string] `add-rows`"
+		);
+
+		@include assert-equal(
+			_base-parse(3rem 4rem),
+			"ERROR [_base-parse] Duplicate shorthand property: [string] `font-size`"
+		);
+	}
+
+	@include test('Unknown type parsing error') {
+		@include assert-equal(
+			_base-parse(3 #fff),
+			'ERROR [_base-parse] Unknown shorthand property: [color] `#fff`'
+		);
+	}
+
+	$base: () !global;
+}
+
+// // Normalize
+// // ---------
+// @include test-module('Susy Normalize [function]') {
+//   @include test('All values') {
+//     $config: (
+//       'span': 'all',
+//       'columns': 6,
+//       'location': 'last',
+//       'spread': 'wider',
+//       'container-spread': 'narrow',
+//     );
+//
+//     $expect: (
+//       'span': 6,
+//       'columns': (1 1 1 1 1 1),
+//       'location': 1,
+//       'spread': 1,
+//       'container-spread': -1,
+//     );
+//
+//     @include assert-equal(
+//       susy-normalize($config),
+//       $expect);
+//   }
+
+//   @include test('Missing Columns') {
+//     @include assert-equal(
+//       susy-normalize(('span': 3)),
+//       ('span': 3));
+//   }
+//
+//   @include test('Last') {
+//     $config: ('columns': (1 1 2 3 5 8 13));
+//     $input: (
+//       'location': 'last',
+//       'span': 4,
+//     );
+//     $expect: (
+//       'location': 4,
+//       'span': 4,
+//     );
+//     @include assert-equal(
+//       susy-normalize($input, $config),
+//       $expect);
+//   }
+//
+//   @include test('All') {
+//     $grid: (
+//       'columns': susy-repeat(10, 5em),
+//       'gutters': 0.5em,
+//       'spread': 'wide',
+//       'container-spread': 'wide',
+//     );
+//     $input: (
+//       'span': 'all',
+//     );
+//     $expect: (
+//       'span': 10,
+//     );
+//
+//     @include assert-equal(
+//       susy-normalize($input, $grid),
+//       $expect);
+//   }
+// }
+//
+//
+// // Normalize Span
+// // --------------
+// @include test-module('Susy Normalize Span [funtion]') {
+//   @include test('Keyword span') {
+//     @include assert-equal(
+//       susy-normalize-span('all', 1 1 1 1 1 1),
+//       6);
+//   }
+// }
+//
+//
+// // Normalize Columns
+// // -----------------
+// @include test-module('Susy Normalize Columns [function]') {
+//   @include test('Nothing to normalize') {
+//     @include assert-equal(
+//       susy-normalize-columns(1 1 1 1 1 1),
+//       1 1 1 1 1 1);
+//   }
+//
+//   @include test('Nothing to normalize') {
+//     @include assert-equal(
+//       susy-normalize-columns(1 1 1 1 1 1),
+//       1 1 1 1 1 1);
+//   }
+//
+//   @include test('Get Symmetrical Slice') {
+//     $config: ('columns': susy-repeat(10, 120px));
+//
+//     @include assert-equal(
+//       susy-normalize-columns(6, $config),
+//       susy-repeat(6, 120px));
+//   }
+//
+//   @include test('Flatten lists') {
+//     $in: 20px susy-repeat(3, 100px) 20px;
+//     $out: 20px 100px 100px 100px 20px;
+//
+//     @include assert-unequal(
+//       $in
+//       $out,
+//       'Confirm that the list needs flattening');
+//
+//     @include assert-equal(
+//       susy-normalize-columns($in),
+//       $out,
+//       'Confirm that the list is now flat');
+//   }
+//
+//   @include test('Error on failed slice') {
+//     $config: ('columns': 3 4 5);
+//
+//     @include assert-equal(
+//       susy-normalize-columns(6, $config),
+//       'ERROR [susy-normalize-columns] context-slice of `6` can not be determined based on grid-columns `3 4 5`.');
+//   }
+// }
+//
+//
+// // Normalize Spread
+// // ----------------
+// @include test-module('Susy Normalize Spread [function]') {
+//   @include test('Keyword spread') {
+//     @include assert-equal(
+//       susy-normalize-spread('wider'),
+//       1,
+//       'Keyword is converted to a number for grid-math');
+//   }
+//
+//   @include test('Numeric spread') {
+//     @include assert-equal(
+//       susy-normalize-spread(-1),
+//       -1,
+//       'Number is returned directly');
+//   }
+// }
+//
+//
+// // Normalize Location
+// // ------------------
+// @include test-module('Susy Normalize Location [function]') {
+//   @include test('Numeric column position') {
+//     @include assert-equal(
+//       susy-normalize-location(2, 3, 1 2 3 5 8),
+//       3,
+//       'Valid position returns unchanged');
+//   }
+//
+//   @include test('Initial position keyword') {
+//     @include assert-equal(
+//       susy-normalize-location(2, 'first', 2 4 6 8),
+//       1,
+//       'Valid initial keyword returns 1');
+//   }
+//
+//   @include test('Final position keyword') {
+//     @include assert-equal(
+//       susy-normalize-location(2, 'last', 2 4 6 8),
+//       3,
+//       'Final keyword returns calculated position from end');
+//   }
+// }
