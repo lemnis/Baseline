@@ -1,3 +1,19 @@
+$_base-element-defaults: (
+    add-rows-to-line-height: 0,
+    border-top-width: 0,
+    margin-top: 0,
+    padding-top: 0,
+    offset-top-type: "split",
+    border-bottom-width: 0,
+    margin-bottom: 0,
+    padding-bottom: 0,
+    offset-bottom-type: "split"
+    // _vertical-align: "baseline",
+    // _box-sizing: "border-box" "content-box",
+    // ascender-height: .7,
+    // descender-height: .2
+);
+
 // Base Parse
 /// Converts the shorthand to the complete element map
 ///
@@ -23,6 +39,7 @@
 ///   when a shorthand value is not recognized
 @function _base-parse($shorthand, $map: $base){
     $return: ();
+	$suppress: ();
     $error: false;
 
 	$settings: _base-settings($map);
@@ -36,44 +53,84 @@
 		$item: nth($shorthand, $i);
         $type: type-of($item);
 		$details: '[#{$type}] `#{$item}`';
+		$suppressed: false;
+
+		@if $type == number and not unitless($item) {
+			$updated-item: _base-suppressed-unit($item, $settings);
+
+			@if $item != $updated-item {
+				$item: $updated-item;
+				$suppressed: true;
+			}
+		}
 
     	@if $type == number and unitless($item) {
             // add line height property
-            $return: _base-map-add($return, "add-rows", $item);
+            $return: _base-map-add($return, "add-rows-to-line-height", $item);
+			@if $suppressed { $suppress: append($suppress, "add-rows-to-line-height"); }
         } @else if $type == number and _base-valid-unit($item, $settings) {
             // font-size property
             $return: _base-map-add($return, "font-size", $item);
+			@if $suppressed { $suppress: append($suppress, "font-size"); }
         } @else if $type == list {
-			$key: null;
-            $nested-map: ();
+			$direction: null;
+            $border-width: null;
+            $offset: null;
+            $offset-type: null;
 
             // loop trough the sub list
             @for $j from 1 through length($item){
                 $nested-item: nth($item, $j);
                 $nested-type: type-of($nested-item);
 
-				@if $nested-type == number and unitless($nested-item) {
-                    // Extra row to be added as whitespace
-                    $nested-map: _base-map-add($nested-map, "rows", $nested-item);
-                } @else if $nested-item == "top" or $nested-item == "bottom" {
-                    // Direction of setting
-                    $key: $nested-item;
-                } @else if $nested-item == "margin" or $nested-item == "padding" or $nested-item == "split" {
+				@debug $nested-item;
+
+                @if
+                    $nested-item == "top" or
+                    $nested-item == "bottom"
+                {
+                    // Direction of the sub-map
+                    $direction: $nested-item;
+                } @else if $nested-type == "number" and unitless($nested-item) {
+                    // Extra whitespace per row
+                    $offset: $nested-item;
+                } @else if
+                    $nested-type == "number" and
+                    _base-valid-unit($nested-item, $settings)
+                {
+                    $border-width: $nested-item;
+                } @else if
+                    $nested-item == "split" or
+                    $nested-item == "padding" or
+                    $nested-item == "margin"
+                {
                     // CSS property to use to calculate the whitespace
-                    $nested-map: _base-map-add($nested-map, "type", $nested-item);
-                } @else if $nested-type == number and _base-valid-unit($nested-item, $settings) {
-                    // Border
-                    $nested-map: _base-map-add($nested-map, "border", $nested-item);
+                    $offset-type: $nested-item;
                 } @else{
                     $error: true;
                 }
             }
 
-			@if $key == null {
+			@if $direction == null {
 				@return _base-error("No direction set in sublist: #{$details}", "_base-parse");
 			}
 
-            $return: _base-map-add($return, $key, $nested-map);
+            @if $border-width != null {
+                $return: _base-map-add($return, "border-#{$direction}-width", $border-width);
+				@if $suppressed { $suppress: append($suppress, "border-#{$direction}-width"); }
+            }
+            @if $offset != null and ($offset-type == null or $offset-type == "split" or $offset-type == "margin") {
+                $return: _base-map-add($return, "margin-#{$direction}", $offset);
+				@if $suppressed { $suppress: append($suppress, "margin-#{$direction}"); }
+            }
+            @if $offset != null and $offset-type == "padding" {
+                $return: _base-map-add($return, "padding-#{$direction}", $offset);
+				@if $suppressed { $suppress: append($suppress, "padding-#{$direction}"); }
+            }
+            @if $offset-type != null {
+                $return: _base-map-add($return, "offset-#{$direction}-type", $offset-type);
+				@if $suppressed { $suppress: append($suppress, "offset-#{$direction}-type"); }
+            }
         } @else{
             $error: true;
         }
@@ -83,5 +140,7 @@
 		}
     }
 
-    @return $return;
+	$return: _base-map-add($return, "suppress", $suppress);
+
+    @return map-merge($_base-element-defaults, $return);
 }
