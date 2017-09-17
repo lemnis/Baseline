@@ -1,0 +1,13 @@
+/// Syntax normalization
+
+@function _base-normalize($config) {
+	// @if not map-has-key($settings, "cap-height") {
+	// 	@return _base-error("There is no cap-height set", "_base-settings");
+	// }
+
+	@if not map-has-key($config, "font-size") {
+		$config: map-merge($config, (font-size: map-get($config, "root-font-size")));
+	}
+
+	@return $config;
+}

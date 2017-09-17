@@ -1,0 +1,11 @@
+dest: docs/
+
+display:
+  # access: public
+
+package: ./package.json
+verbose: true
+groups:
+  Settings: 'Configuration'
+  text: 'Text Functions'
+  debug: 'Debug Functions'

@@ -1,0 +1,21 @@
+//*
+///  Calculates the height of a single row
+///  @param  {Map} $config [$base]	Config map
+///  @return {Number}         			Row height in unit of the root font-size		
+////
+@function base-row($config: $base) {
+	$config: _base-compile((), $config);
+
+	// @if type-of($rows) == map {
+	// 	// $config is given as first param
+	// 	// reset default rows
+	// 	$rows: 1;
+	// } @else {
+	// 	$rows: 					map-get($config, "add-rows-to-line-height");
+	// }
+
+	$root-font-size: 	map-get($config, "root-font-size");
+	$row-height: 			map-get($config, "row-height");
+
+	@return _base-math-row-height(1, $row-height, $root-font-size);
+}

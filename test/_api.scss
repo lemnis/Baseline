@@ -1,0 +1,22 @@
+
+@include describe("Base row [function]") {
+	$base: (cap-height: 3) !global;
+
+	@include it("with default settings") {
+		@include assert-equal(base-row(), .5rem);
+	}
+
+	@include it("with custom row-height") {
+		$custom-config: ( row-height: 3 );
+
+		@include assert-equal(base-row($custom-config), 3rem);
+	}
+
+	@include it("with custom font-size") {
+		$custom-config: ( row-height: 2, root-font-size: 11px );
+
+		@include assert-equal(base-row($custom-config), 22px);
+	}
+
+	$base: () !global;
+}

@@ -1,146 +1,61 @@
 $_base-element-defaults: (
-    add-rows-to-line-height: 0,
-    border-top-width: 0,
-    margin-top: 0,
-    padding-top: 0,
-    offset-top-type: "split",
-    border-bottom-width: 0,
-    margin-bottom: 0,
-    padding-bottom: 0,
-    offset-bottom-type: "split"
-    // _vertical-align: "baseline",
-    // _box-sizing: "border-box" "content-box",
-    // ascender-height: .7,
-    // descender-height: .2
+	add-rows-to-line-height: 0
 );
 
-// Base Parse
+//* Base Parse
 /// Converts the shorthand to the complete element map
 ///
-/// @access private
 /// @group Helpers
-/// @todo add support for vertical-align
 ///
-/// @param {list} $shorthand
+/// @param {List} $shorthand
 /// Shorthand expression to define the font-size, containing:
 /// - font-size (default: font-size set in settings)
 /// - increased line-height per row
-/// - `list`, top spacing
-///     - `unitless number`, extra rows to add as whitespace
-///     - `string`, method used (padding, margin or split)
-///     - 'unit number', size of border
-/// - `list`, bottom spacing
-///     - `unitless number`, extra rows to add as whitespace
-///     - `string`, method used (padding, margin or split)
+/// @param {Map} $config
 ///
 /// @return {map}     Map of element settings
 ///
-/// @throw
-///   when a shorthand value is not recognized
-@function _base-parse($shorthand, $map: $base){
-    $return: ();
+/// @throw when a shorthand value is not recognized
+@function _base-parse($shorthand, $config: $base) {
+	$return: ();
 	$suppress: ();
-    $error: false;
+	$error: false;
 
-	$settings: _base-settings($map);
+	$config: _base-settings($config);
 
 	// error occured
-	@if type-of($settings) == "string" {
-		@return $settings;
+	@if type-of($config) != "map" {
+		@return $config;
 	}
 
-	@for $i from 1 through length($shorthand){
+	$root-font-size: map-get($config, "root-font-size");
+
+	@for $i from 1 through length($shorthand) {
 		$item: nth($shorthand, $i);
-        $type: type-of($item);
-		$details: '[#{$type}] `#{$item}`';
-		$suppressed: false;
+		$type: type-of($item);
+		$details: "[#{$type}] `#{$item}`";
 
-		@if $type == number and not unitless($item) {
-			$updated-item: _base-suppressed-unit($item, $settings);
-
-			@if $item != $updated-item {
-				$item: $updated-item;
-				$suppressed: true;
-			}
+		@if $type == number and unitless($item) {
+			// add line height property
+			$return: _base-map-add($return, "add-rows-to-line-height", $item);
+		} @else if $type == number and _base-valid-unit($item, $root-font-size) {
+			// font-size property
+			$return: _base-map-add($return, "font-size", $item);
+		} @else {
+			$error: true;
 		}
 
-    	@if $type == number and unitless($item) {
-            // add line height property
-            $return: _base-map-add($return, "add-rows-to-line-height", $item);
-			@if $suppressed { $suppress: append($suppress, "add-rows-to-line-height"); }
-        } @else if $type == number and _base-valid-unit($item, $settings) {
-            // font-size property
-            $return: _base-map-add($return, "font-size", $item);
-			@if $suppressed { $suppress: append($suppress, "font-size"); }
-        } @else if $type == list {
-			$direction: null;
-            $border-width: null;
-            $offset: null;
-            $offset-type: null;
-
-            // loop trough the sub list
-            @for $j from 1 through length($item){
-                $nested-item: nth($item, $j);
-                $nested-type: type-of($nested-item);
-
-				@debug $nested-item;
-
-                @if
-                    $nested-item == "top" or
-                    $nested-item == "bottom"
-                {
-                    // Direction of the sub-map
-                    $direction: $nested-item;
-                } @else if $nested-type == "number" and unitless($nested-item) {
-                    // Extra whitespace per row
-                    $offset: $nested-item;
-                } @else if
-                    $nested-type == "number" and
-                    _base-valid-unit($nested-item, $settings)
-                {
-                    $border-width: $nested-item;
-                } @else if
-                    $nested-item == "split" or
-                    $nested-item == "padding" or
-                    $nested-item == "margin"
-                {
-                    // CSS property to use to calculate the whitespace
-                    $offset-type: $nested-item;
-                } @else{
-                    $error: true;
-                }
-            }
-
-			@if $direction == null {
-				@return _base-error("No direction set in sublist: #{$details}", "_base-parse");
-			}
-
-            @if $border-width != null {
-                $return: _base-map-add($return, "border-#{$direction}-width", $border-width);
-				@if $suppressed { $suppress: append($suppress, "border-#{$direction}-width"); }
-            }
-            @if $offset != null and ($offset-type == null or $offset-type == "split" or $offset-type == "margin") {
-                $return: _base-map-add($return, "margin-#{$direction}", $offset);
-				@if $suppressed { $suppress: append($suppress, "margin-#{$direction}"); }
-            }
-            @if $offset != null and $offset-type == "padding" {
-                $return: _base-map-add($return, "padding-#{$direction}", $offset);
-				@if $suppressed { $suppress: append($suppress, "padding-#{$direction}"); }
-            }
-            @if $offset-type != null {
-                $return: _base-map-add($return, "offset-#{$direction}-type", $offset-type);
-				@if $suppressed { $suppress: append($suppress, "offset-#{$direction}-type"); }
-            }
-        } @else{
-            $error: true;
-        }
-
-		@if $error {
+		// when in debug mode, check if error occured in _base-map-add
+		@if $_base-error-output-override == true and type-of($return) == "string" {
+			@return $return;
+		} @else if $error {
 			@return _base-error("Unknown shorthand property: #{$details}", "_base-parse");
 		}
-    }
+	}
 
-	$return: _base-map-add($return, "suppress", $suppress);
-
-    @return map-merge($_base-element-defaults, $return);
+	@if type-of($return) == "map" {
+		@return map-merge($_base-element-defaults, $return);
+	} @else {
+		@return _base-error("Unknown error happened", "_base-parse");
+	}
 }

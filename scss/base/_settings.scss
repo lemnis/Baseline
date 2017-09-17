@@ -1,4 +1,8 @@
-// Base
+////
+///  @group Settings
+////
+
+//* Base
 /// The grid is defined in a single map variable,
 /// with four initial properties:
 /// `font-size`, `row-height`.
@@ -8,27 +12,22 @@
 /// under different variable names,
 /// to override the defaults as-needed.
 ///
-/// @group Settings
 /// @type Map
 ///
-/// @link
-///   https://codepen.io/mirisuzanne/pen/EgmJJp?editors=1100
-///   Spread examples on CodePen
-///
-/// @prop {Number} font-size         Font-size of the root element
-/// @prop {Number} row-height        Height of each row, generaly 1/2 of the font-size
-/// @prop {Number} min-line-height   Minimum line-height
+/// @prop {Number} root-font-size   [1rem]	Font-size of the root element
+/// @prop {Number} row-height				[.5]  	Height of each row, generaly 1/2 of the font-size
+/// @prop {Number} min-line-height	[1.2]		Minimum line-height
 /// @prop {Number} cap-height
 /// Cap-height of the used font.
-/// Can be looked up at resource https://jamonserrano.github.io/plumber-sass/baserows/
+/// Possible resource https://jamonserrano.github.io/plumber-sass/baselines/
 ///
-/// @example scss - default values
+/// @example scss - Default values
 /// $base: (
 ///   font-size: 1rem,
 ///   row-height: .5
 /// );
 ///
-/// @example scss - Segoe UI
+/// @example scss - Example with Segoe UI as font
 /// $base: (
 ///   font-size: 1rem,
 ///   row-height: .5,
@@ -36,29 +35,25 @@
 /// );
 $base: () !default;
 
-// Base defaults
+//* Base defaults
 /// Configuration map of Base defaults.
 /// Do **not** override this, use `$base` to set the project defaults
 ///
-/// @access private
-/// @group Settings
 /// @type Map
 ///
 /// @prop {Number} font-size         [1rem]
 /// @prop {Number} row-height        [.5]
 /// @prop {Number} min-line-height   [1.2]
 $_base-settings-defaults: (
-  font-size: 1rem,
-  row-height: .5,
-  min-line-height: 1.2
+	root-font-size: 1rem,
+	row-height: .5,
+	min-line-height: 1.2
 );
 
-// Base Settings
+//* Base Settings
 /// Return a combined map of Base settings,
 /// based on `$_base-settings-defaults`, `$base` and
-/// any local map passed into a funciton.
-///
-/// @group Settings
+/// any local map passed into the function.
 ///
 /// @param {maps} $overrides…
 /// Optional map override of global configuration settings.
@@ -71,40 +66,15 @@ $_base-settings-defaults: (
 /// then `$base` project settings,
 /// and finally the `$_base-settings-defaults`
 @function _base-settings($overrides...) {
-    $settings: map-merge($_base-settings-defaults, $base);
+	$settings: map-merge($_base-settings-defaults, $base);
 
-    @each $config in $overrides {
-        $settings: map-merge($settings, $config);
-    }
+	@each $config in $overrides {
+		$settings: map-merge($settings, $config);
+  }
 
-	@if not map-has-key($settings, "cap-height"){
-        @return _base-error("There is no cap-height set", "_base-settings");
-    }
+	@if not map-has-key($settings, "cap-height") {
+		@return _base-error("There is no cap-height set", "_base-settings");
+  }
 
-    @return $settings;
-}
-
-// Get Setting
-/// Return the current value of any Base setting
-///
-/// @group Settings
-///
-/// @param {string} $key - Setting to retrieve from the configuration.
-///
-/// @return {*}
-/// Value mapped to `$key` in the configuration maps, in order of specificity:
-/// passed $map, `$base` and then `$_base-settings-defaults`
-@function _base-settings-get($key, $map: $base) {
-    $settings: _base-settings($map);
-
-	// error occured
-	@if type-of($settings) == "string" {
-		@return $settings;
-	}
-
-    @if not map-has-key($settings, $key) {
-		@return _base-error("There is no Base setting called `#{$key}`", "_base-settings-get");
-    }
-
-    @return map-get($settings, $key);
+	@return $settings;
 }

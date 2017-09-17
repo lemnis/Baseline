@@ -1,0 +1,143 @@
+@include test-module ("Base math row height [function]") {
+	@include test("Should have a unit") {
+		$font-size: 12px;
+		@include assert-equal(
+			unit(_base-math-row-height(1, $font-size, 1)),
+			unit($font-size),
+			"Unit is the same as the font-size"
+		);
+	}
+
+	@include test("Test multiplication") {
+		$font-size: 12px;
+		@include assert-equal(
+			_base-math-row-height(1, $font-size, 1),
+			$font-size,
+			"Row-height is the same as the font-size"
+		);
+	}
+}
+
+@include test-module("Base math rows [function]") {
+	@include test("Font-size that fits perfect within row") {
+		@include assert-equal(
+			_base-math-rows(12px, 0, 12px, 1, 1),
+			2,
+			"Extra row should be given to prevent rounding errors"
+		);
+	}
+
+	@include test("Font-size that is a bit smaller than 1 row") {
+		@include assert-equal(
+			_base-math-rows(11px, 0, 12px, 1, 1),
+			1,
+			"1 row should be returned to be occupied"
+		);
+	}
+
+	@include test("Font-size that is a bit bigger than 1 row") {
+		@include assert-equal(
+			_base-math-rows(13px, 0, 12px, 1, 1),
+			2,
+			"2 rows should be returned to be occupied"
+		);
+	}
+
+	@include test("Row with high min. line-height") {
+		@include assert-equal(
+			_base-math-rows(12px, 0, 12px, 1, 2),
+			2,
+			"The min. line-height should be given"
+		);
+	}
+	@include test("Row with high and unperfect min. line-height") {
+		@include assert-equal(
+			_base-math-rows(14px, 0, 12px, 1, 2),
+			3,
+			"Returned rows should be bigger than min. line-height"
+		);
+	}
+}
+
+@include test-module ("Base math shoulder top [function]") {
+	@include test("Should have a unit") {
+		$font-size: 12px;
+		@include assert-equal(
+			unit(_base-math-shoulder-top($font-size, 1, 1)),
+			unit($font-size),
+			"Unit is the same as the font-size"
+		);
+	}
+
+	@include test("Test sum") {
+		@include assert-equal(
+			_base-math-shoulder-top(12px, 1, 1),
+			0,
+			"No shoulder height should be given"
+		);
+		@include assert-equal(
+			_base-math-shoulder-top(12px, 4, 1),
+			18px,
+			"Should be 1.5x the size of the given font-size with given settings"
+		);
+	}
+}
+
+@include test-module ("Base math shoulder bottom [function]") {
+	@include test("Should have a unit") {
+		$font-size: 12px;
+		@include assert-equal(
+			unit(_base-math-shoulder-bottom($font-size, 1, 12px, 1, 1)),
+			unit($font-size),
+			"Unit is the same as the font-size"
+		);
+	}
+
+	@include test("Test sum") {
+		@include assert-equal(
+			_base-math-shoulder-bottom(12px, 1, 12px, 1, 1),
+			0,
+			"No shoulder height should be given"
+		);
+
+		@include assert-equal(
+			_base-math-shoulder-bottom(12px, 4, 12px, 1, 1),
+			6px,
+			"Should be .5x the size of the given font-size with given settings"
+		);
+	}
+
+	@include test("Shouldn't be able to span over multiple row when needed") {
+		$root-font-size: 16px;
+		$row-height: .5;
+		$calculated-row-height: _base-math-row-height(1, $root-font-size, $row-height);
+		$shoulder-height: _base-math-shoulder-bottom(53px, 4, $root-font-size, $row-height, 1);
+
+		@include assert-true(
+			$shoulder-height < $calculated-row-height,
+			"Shoulder height should be smaller than the row height"
+		);
+	}
+}
+
+// @include test-module("Base math line height") {
+// 	@include test("Test sum") {
+// 		@include assert-equal(
+// 			_base-math-line-height(0, 12px, 12px, 1),
+// 			0,
+// 			"No line-height when no rows are occupied"
+// 		);
+//
+// 		@include assert-equal(
+// 			_base-math-line-height(1, 12px, 12px, 1),
+// 			1,
+// 			"Absolute line-height matches the font-size"
+// 		);
+//
+// 		@include assert-equal(
+// 			_base-math-line-height(1, 8px, 12px, 1),
+// 			1.5,
+// 			"The absolute line-height should be 1.5x the given font-size"
+// 		);
+// 	}
+// // }

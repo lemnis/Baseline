@@ -1,10 +1,13 @@
-$_base-error-output-override: true;
-
 @import "./../node_modules/sass-true/sass/true";
 @import "./../scss/baseline";
 
-@import "parse";
+$_base-error-output-override: true;
+
 @import "settings";
+@import "parse";
+@import "math";
+@import "api";
+
 //
 // @include test-module("Base setting get [function]") {
 // 	@include test("Default configuration") {

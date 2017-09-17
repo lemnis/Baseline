@@ -1,18 +1,14 @@
-// Base Utilities
-// ==============
+////
+///	@group utilities
+////
 
-// Base Error Output Override
+//* Base Error Output Override
 /// Turn off error output for testing
-/// @group utilities
-/// @access private
 $_base-error-output-override: false !default;
 
-// Base Error
+//* Base Error
 /// Optionally return error messages without failing,
 /// as a way to test error cases
-///
-/// @group utilities
-/// @access private
 ///
 /// @param {string} $message 	A useful error message, explaining the problem
 /// @param {string} $source 	The original source of the error for debugging
@@ -22,28 +18,47 @@ $_base-error-output-override: false !default;
 /// @throws 					When `$override == false`
 @function _base-error($message, $source, $override: $_base-error-output-override) {
 	@if $override {
-		@return 'ERROR [#{$source}] #{$message}';
+		@return "ERROR [#{$source}] #{$message}";
  	}
 
-  	@error '[#{$source}] #{$message}';
+	@error "[#{$source}] #{$message}";
 }
 
-// Map add
+//* Map add
 /// Adds a key to the map, if not yet set
 ///
-///	@group utilities
-///	@access private
-///
-/// @param {map} 	$map	A map where the key-value pair should be added
-/// @param {string} $key 	Key to be added to the map
-/// @param {*} 		$value 	Value to be added to the map
+/// @param {map} 		$map		A map where the key-value pair should be added
+/// @param {string} $key 		Key to be added to the map
+/// @param {*} 			$value 	Value to be added to the map
 ///
 /// @return {map} 	The updated map, with the new key-value pair
-/// @throw 			Duplicate key: ...
-@function _base-map-add($map, $key, $value){
-	@if map-has-key($map, $key){
+/// @throw 					when a duplicated key is tried to add
+@function _base-map-add($map, $key, $value) {
+	@if map-has-key($map, $key) {
 		@return _base-error("Duplicate key: [#{type-of($key)}] `#{$key}`", "_base-map-add");
 	}
 
 	@return map-merge($map, ($key: $value));
+}
+
+//* Base Add Unit
+/// Add `$unit` to unitless `$value`
+/// Src: https://hugogiraudel.com/2014/01/15/sass-string-to-number/
+///
+/// @param {Number} $value 	Value to add unit to
+/// @param {String} $unit 	String representation of the unit
+///
+/// @return {Number} 		`$value` expressed in `$unit`
+@function _base-add-unit($value, $unit) {
+	$units: (
+		"px": 1px, "cm": 1cm, "mm": 1mm, "%": 1%, "ch": 1ch, "pc": 1pc, "in": 1in,
+		"em": 1em, "rem": 1rem, "pt": 1pt, "ex": 1ex, "vw": 1vw, "vh": 1vh,
+		"vmin": 1vmin, "vmax": 1vmax
+	);
+
+	@if not index(map-keys($units), $unit) {
+		@return _base-error("Unit `#{$unit}` isn't supported", "_base-add-unit");
+	}
+
+	@return $value * map-get($units, $unit);
 }

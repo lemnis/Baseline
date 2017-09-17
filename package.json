@@ -1,13 +1,16 @@
 {
   "name": "baseline",
-  "version": "0.1.0",
-  "description": "Sass power-tool to keep everything on the baseline",
+  "version": "0.3.0",
+  "description": "Sass tool to keep everything on the baseline",
+  "author": "Lisa Martens <lemnis.martens@gmail.com>",
   "main": "scss/baseline.scss",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "gulp test"
+    "test": "node_modules/.bin/mocha",
+    "lint": "node_modules/.bin/sass-lint -vq",
+    "sassdoc": "sassdoc sass/"
   },
   "keywords": [
     "grid",
@@ -16,9 +19,10 @@
     "layout",
     "sass"
   ],
-  "author": "Lisa Martens",
   "license": "MIT",
   "devDependencies": {
-    "sass-true": "^3.0.0-beta.1"
+    "mocha": "^3.5.0",
+    "sass-true": "^3.0.0",
+    "sassdoc": "^2.3.0"
   }
 }
