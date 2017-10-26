@@ -1,3 +1,44 @@
+@include describe("Base top [function]") {
+	$base: (cap-height: 3) !global;
+
+	@include it("with default settings") {
+		@include assert-equal(base-top(), .25rem);
+	}
+	@include it("as relative") {
+		@include assert-equal(base-top(relative), .25em);
+	}
+	@include it("is never bigger than a single row") {
+		@include assert(base-top(40rem) < base-row());
+	}
+
+	$base: () !global;
+}
+
+@include describe("Base line-height [function]") {
+	$base: (cap-height: 3) !global;
+
+	@include it("with default settings") {
+		@include assert-equal(base-line-height(), 1.5);
+	}
+	@include it("with custom font-size") {
+		@include assert-equal(base-line-height(2rem), 1.25);
+	}
+
+	$base: () !global;
+}
+
+@include describe("Base font-size [function]") {
+	$base: (cap-height: 3) !global;
+
+	@include it("with default settings") {
+		@include assert-equal(base-font-size(), map-get($_base-settings-defaults, "root-font-size"));
+	}
+	@include it("with specific font-size") {
+		@include assert-equal(base-font-size(3rem), 3rem);
+	}
+
+	$base: () !global;
+}
 
 @include describe("Base row [function]") {
 	$base: (cap-height: 3) !global;
@@ -5,16 +46,15 @@
 	@include it("with default settings") {
 		@include assert-equal(base-row(), .5rem);
 	}
-
+	@include it("with specific amount of rows") {
+		@include assert-equal(base-row(3), 1.5rem);
+	}
 	@include it("with custom row-height") {
 		$custom-config: ( row-height: 3 );
-
 		@include assert-equal(base-row($custom-config), 3rem);
 	}
-
 	@include it("with custom font-size") {
 		$custom-config: ( row-height: 2, root-font-size: 11px );
-
 		@include assert-equal(base-row($custom-config), 22px);
 	}
 

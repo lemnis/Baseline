@@ -1,0 +1,107 @@
+////
+///  @group plugin_aspect
+////
+
+@import "convert";
+
+//* Base Debug Defaults
+/// This plugin adds the `aspect-allow` property and default value to `$_base-settings-defaults` —
+/// you can override that value in `$base` or any other grid settings map.
+/// @type {map}
+$_base-settings-defaults: map-merge(
+	(
+		aspect: (
+			allow: "smaller",
+			from: 1,
+			until: 120rem
+		)
+	), $_base-settings-defaults
+);
+
+
+//* Base Aspect Ratio
+/// Determines the height needed to keep a element closest
+/// to given aspect-ratio per row
+///
+/// #### BE CAUTION TO USE THIS MIXIN
+/// it can add many css lines.
+/// It's advised to use this function in small range or small elements
+///
+/// @param {Number} $aspect   				 Desired aspect-ratio (width/height)
+/// @param {Number} $perc 		[100%]	 Width in percentage used by the element
+/// @param {String} $property [height]  Property to set the value on
+/// @param {Map} $config [$base] -
+///   Optional map of Base configuration settings.
+///   See `$base` documentation for details.
+///
+/// @example scss - Basic usage
+///   $base: (cap-height: .5);
+///   svg {
+///     @include base-aspect-ratio(1);
+///   }
+/// @example scss - Within a specific range
+///   $base: (cap-height: .5);
+///   svg {
+///     @include base-aspect-ratio(1, 25%, $config: (aspect: (from: 3, until: 6, allow: wider)));
+///   }
+/// @example scss - Allow a wider aspect-ratio
+///   $base: (cap-height: .5);
+///   svg {
+///     @include base-aspect-ratio(1, 25%, $config: (aspect: (until: 3, allow: smaller)));
+///   }
+@mixin base-aspect-ratio($aspect, $perc: 100%, $property: "height", $config: $base) {
+	$config: _base-compile((), $config);
+
+	$root-font-size: 	map-get($config, "root-font-size");
+	$aspect-config: 	map-get($config, "aspect");
+
+	$aspect-allow: 		map-get($aspect-config, "allow");
+	$from: 						map-get($aspect-config, "from");
+	$until: 					map-get($aspect-config, "until");
+	$and: 						map-get($aspect-config, "and");
+
+	@if $aspect-allow != "smaller" and $aspect-allow != "wider" {
+		@error _base-error(
+			"`aspect-allow` is defined properly config map, only allow wider and smaller",
+			"base-aspect-ratio"
+		);
+	}
+
+	$row-height: base-row();
+	$perc-in-decimal: ($perc / 100%);
+
+	// **** CONVERT $from AND $until VALUES TO ROW COUNT IF NECCESSARY ****
+	$from-rows: if(unitless($from), $from, ceil(base-convert-size-to-rows($from * $perc-in-decimal)));
+	$until-rows: if(unitless($until), $until, ceil(base-convert-size-to-rows($until * $perc-in-decimal / $aspect)));
+	// **** END OF CONVERSION ****
+
+	// use last row to set default value
+	#{$property}: $until-rows * $row-height;
+
+	// start at second last row when smaller, otherwise loop upwards
+	$current-rows: if($aspect-allow == "smaller", $until-rows - 1, $from-rows);
+
+	@while if($aspect-allow == "smaller", $current-rows >= $from-rows, $current-rows <= $until-rows) {
+		$media-query: "";
+		$width-boundry: ($current-rows * $row-height * $aspect) / ($perc / 100%);
+
+		@if $aspect-allow == "smaller" {
+			$media-query: "(max-width: #{$width-boundry})";
+		} @else if $aspect-allow == "wider" {
+			$media-query: "(min-width: #{$width-boundry})";
+		}
+
+		@if $and != null {
+			$media-query: "#{$media-query} and #{$and}";
+		}
+
+		@at-root (without: media) {
+			@media #{$media-query} {
+				#{$property}: $current-rows * $row-height;
+			}
+		}
+
+		// update index upwards or downwards depending on setting
+		$current-rows: if($aspect-allow == "smaller", $current-rows - 1, $current-rows + 1);
+	}
+}

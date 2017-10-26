@@ -72,7 +72,7 @@ rules:
   #   - 2
   #   - max-depth: 3
   # placeholder-name-format: 2
-  property-sort-order: 
+  property-sort-order:
     - 1
     - style "concentric"
   quotes:

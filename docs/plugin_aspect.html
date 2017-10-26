@@ -1,0 +1,1489 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>baseline Documentation</title><link href="assets/img/favicon.ico" rel="shortcut icon"><link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700|Source+Sans+Pro:400,400i,700,700i" rel="stylesheet"><link rel="stylesheet" href="assets/css/main.css"></head><body><svg xmlns="http://www.w3.org/2000/svg" hidden><symbol id="icon-menu" viewBox="0 0 24 28"><title>menu icon</title><path d="M24 21v2c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1v-2c0-.547.453-1 1-1h22c.547 0 1 .453 1 1zm0-8v2c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1v-2c0-.547.453-1 1-1h22c.547 0 1 .453 1 1zm0-8v2c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V5c0-.547.453-1 1-1h22c.547 0 1 .453 1 1z"/></symbol><symbol id="icon-search" viewBox="0 0 24 28"><title>search icon</title><path d="M24 21v2c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1v-2c0-.547.453-1 1-1h22c.547 0 1 .453 1 1zm0-8v2c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1v-2c0-.547.453-1 1-1h22c.547 0 1 .453 1 1zm0-8v2c0 .547-.453 1-1 1H1c-.547 0-1-.453-1-1V5c0-.547.453-1 1-1h22c.547 0 1 .453 1 1z"/></symbol></svg><div data-sassdoc-region="app"><header role="banner" data-sassdoc-region="banner"><button data-nav-toggle="small" data-toggle="button" aria-controls="nav-small" aria-pressed="false" data-toggle-synced="false"><svg data-icon="menu" data-icon-size="icon-small"><title>menu</title><use xlink:href="#icon-menu"/></svg></button> <button data-nav-toggle="large" data-toggle="button" aria-controls="nav-large" aria-pressed="true" data-toggle-synced="false"><svg data-icon="menu" data-icon-size="icon-small"><title>menu</title><use xlink:href="#icon-menu"/></svg></button><h1 data-sassdoc="project-title"><a href="index.html" rel="home" data-sassdoc="project-name">baseline</a> <span data-sassdoc="project-version">0.4.0</span></h1></header><div data-sassdoc-region="container"><nav role="navigation" data-nav-menu="small" data-toggle="target" id="nav-small" data-target-id="nav-small" aria-expanded="false" data-auto-closing="false" data-auto-closing-on-any-click="false"><h3 data-sassdoc="nav-title"><a href="index.html" data-sassdoc-nav="is-not-active">baseline</a></h3><ul><li data-sassdoc="nav-item"><a href="configuration.html" data-sassdoc-nav="is-not-active">Configuration</a></li><li data-sassdoc="nav-item"><a href="functions.html" data-sassdoc-nav="is-not-active">Functions</a></li><li data-sassdoc="nav-item"><a href="plugin_aspect.html" data-sassdoc-nav="is-active">Plugin: Aspect Ratio</a></li><li data-sassdoc="nav-item"><a href="plugin_convert.html" data-sassdoc-nav="is-not-active">Plugin: Convert Size</a></li><li data-sassdoc="nav-item"><a href="plugin_debug.html" data-sassdoc-nav="is-not-active">Plugin: Debug Image</a></li></ul></nav><nav role="navigation" data-nav-menu="large" data-toggle="target" id="nav-large" data-target-id="nav-large" aria-expanded="true" data-auto-closing="false" data-auto-closing-on-any-click="false"><h3 data-sassdoc="nav-title"><a href="index.html" data-sassdoc-nav="is-not-active">baseline</a></h3><ul><li data-sassdoc="nav-item"><a href="configuration.html" data-sassdoc-nav="is-not-active">Configuration</a></li><li data-sassdoc="nav-item"><a href="functions.html" data-sassdoc-nav="is-not-active">Functions</a></li><li data-sassdoc="nav-item"><a href="plugin_aspect.html" data-sassdoc-nav="is-active">Plugin: Aspect Ratio</a></li><li data-sassdoc="nav-item"><a href="plugin_convert.html" data-sassdoc-nav="is-not-active">Plugin: Convert Size</a></li><li data-sassdoc="nav-item"><a href="plugin_debug.html" data-sassdoc-nav="is-not-active">Plugin: Debug Image</a></li></ul></nav><main role="main"><nav data-sassdoc-region="breadcrumb"><a href="index.html">baseline</a> » <strong>Plugin: Aspect Ratio</strong></nav><div data-sassdoc-region="main" data-sassdoc-page="plugin_aspect"><section class="item" id="mixin--base-aspect-ratio"><header data-item-section="header"><h2 class="item-title"><span class="item-type">@mixin</span> <a href="#mixin--base-aspect-ratio" class="item-name">base-aspect-ratio()</a></h2></header><div data-item-section="summary"><h3 class="item-subtitle">Description</h3><div class="text-block"><p>Determines the height needed to keep a element closest to given aspect-ratio per row</p><h4 id="be-caution-to-use-this-mixin">BE CAUTION TO USE THIS MIXIN</h4><p>it can add many css lines. It&#39;s advised to use this function in small range or small elements</p></div></div><div data-item-section="parameter"><h3 class="item-subtitle">Parameters</h3><div class="param-list"><h4 class="param-title"><span class="item-name">$aspect:</span> <span class="value-type">(Number)</span></h4><div class="param-details text-block"><p>Desired aspect-ratio (width/height)</p></div></div><div class="param-list"><h4 class="param-title"><span class="item-name">$perc:</span> <span class="item-value">100%</span> <span class="value-type">(Number)</span></h4><div class="param-details text-block"><p>Width in percentage used by the element</p></div></div><div class="param-list"><h4 class="param-title"><span class="item-name">$property:</span> <span class="item-value">height</span> <span class="value-type">(String)</span></h4><div class="param-details text-block"><p>Property to set the value on</p></div></div><div class="param-list"><h4 class="param-title"><span class="item-name">$config:</span> <span class="item-value">$base</span> <span class="value-type">(Map)</span></h4><div class="param-details text-block"><p>Optional map of Base configuration settings. See <code>$base</code> documentation for details.</p></div></div></div><div data-item-section="examples"><h3 class="item-subtitle">Examples</h3><div class="example"><div class="example-code"><div class="code-block"><div class="code-header"><span class="code-language">scss </span><span class="code-description">Basic usage</span></div><pre data-sassdoc="hljs"><code class="lang-scss">$base: (cap-height: .5);
+svg {
+  @include base-aspect-ratio(1);
+}</code></pre></div><div class="code-block"><div class="code-header"><span class="code-language">css </span><span class="code-description">compiled</span></div><pre data-sassdoc="hljs"><code class="lang-css">svg {
+  height: 120rem;
+}
+
+@media (max-width: 119.5rem) {
+  svg {
+    height: 119.5rem;
+  }
+}
+
+@media (max-width: 119rem) {
+  svg {
+    height: 119rem;
+  }
+}
+
+@media (max-width: 118.5rem) {
+  svg {
+    height: 118.5rem;
+  }
+}
+
+@media (max-width: 118rem) {
+  svg {
+    height: 118rem;
+  }
+}
+
+@media (max-width: 117.5rem) {
+  svg {
+    height: 117.5rem;
+  }
+}
+
+@media (max-width: 117rem) {
+  svg {
+    height: 117rem;
+  }
+}
+
+@media (max-width: 116.5rem) {
+  svg {
+    height: 116.5rem;
+  }
+}
+
+@media (max-width: 116rem) {
+  svg {
+    height: 116rem;
+  }
+}
+
+@media (max-width: 115.5rem) {
+  svg {
+    height: 115.5rem;
+  }
+}
+
+@media (max-width: 115rem) {
+  svg {
+    height: 115rem;
+  }
+}
+
+@media (max-width: 114.5rem) {
+  svg {
+    height: 114.5rem;
+  }
+}
+
+@media (max-width: 114rem) {
+  svg {
+    height: 114rem;
+  }
+}
+
+@media (max-width: 113.5rem) {
+  svg {
+    height: 113.5rem;
+  }
+}
+
+@media (max-width: 113rem) {
+  svg {
+    height: 113rem;
+  }
+}
+
+@media (max-width: 112.5rem) {
+  svg {
+    height: 112.5rem;
+  }
+}
+
+@media (max-width: 112rem) {
+  svg {
+    height: 112rem;
+  }
+}
+
+@media (max-width: 111.5rem) {
+  svg {
+    height: 111.5rem;
+  }
+}
+
+@media (max-width: 111rem) {
+  svg {
+    height: 111rem;
+  }
+}
+
+@media (max-width: 110.5rem) {
+  svg {
+    height: 110.5rem;
+  }
+}
+
+@media (max-width: 110rem) {
+  svg {
+    height: 110rem;
+  }
+}
+
+@media (max-width: 109.5rem) {
+  svg {
+    height: 109.5rem;
+  }
+}
+
+@media (max-width: 109rem) {
+  svg {
+    height: 109rem;
+  }
+}
+
+@media (max-width: 108.5rem) {
+  svg {
+    height: 108.5rem;
+  }
+}
+
+@media (max-width: 108rem) {
+  svg {
+    height: 108rem;
+  }
+}
+
+@media (max-width: 107.5rem) {
+  svg {
+    height: 107.5rem;
+  }
+}
+
+@media (max-width: 107rem) {
+  svg {
+    height: 107rem;
+  }
+}
+
+@media (max-width: 106.5rem) {
+  svg {
+    height: 106.5rem;
+  }
+}
+
+@media (max-width: 106rem) {
+  svg {
+    height: 106rem;
+  }
+}
+
+@media (max-width: 105.5rem) {
+  svg {
+    height: 105.5rem;
+  }
+}
+
+@media (max-width: 105rem) {
+  svg {
+    height: 105rem;
+  }
+}
+
+@media (max-width: 104.5rem) {
+  svg {
+    height: 104.5rem;
+  }
+}
+
+@media (max-width: 104rem) {
+  svg {
+    height: 104rem;
+  }
+}
+
+@media (max-width: 103.5rem) {
+  svg {
+    height: 103.5rem;
+  }
+}
+
+@media (max-width: 103rem) {
+  svg {
+    height: 103rem;
+  }
+}
+
+@media (max-width: 102.5rem) {
+  svg {
+    height: 102.5rem;
+  }
+}
+
+@media (max-width: 102rem) {
+  svg {
+    height: 102rem;
+  }
+}
+
+@media (max-width: 101.5rem) {
+  svg {
+    height: 101.5rem;
+  }
+}
+
+@media (max-width: 101rem) {
+  svg {
+    height: 101rem;
+  }
+}
+
+@media (max-width: 100.5rem) {
+  svg {
+    height: 100.5rem;
+  }
+}
+
+@media (max-width: 100rem) {
+  svg {
+    height: 100rem;
+  }
+}
+
+@media (max-width: 99.5rem) {
+  svg {
+    height: 99.5rem;
+  }
+}
+
+@media (max-width: 99rem) {
+  svg {
+    height: 99rem;
+  }
+}
+
+@media (max-width: 98.5rem) {
+  svg {
+    height: 98.5rem;
+  }
+}
+
+@media (max-width: 98rem) {
+  svg {
+    height: 98rem;
+  }
+}
+
+@media (max-width: 97.5rem) {
+  svg {
+    height: 97.5rem;
+  }
+}
+
+@media (max-width: 97rem) {
+  svg {
+    height: 97rem;
+  }
+}
+
+@media (max-width: 96.5rem) {
+  svg {
+    height: 96.5rem;
+  }
+}
+
+@media (max-width: 96rem) {
+  svg {
+    height: 96rem;
+  }
+}
+
+@media (max-width: 95.5rem) {
+  svg {
+    height: 95.5rem;
+  }
+}
+
+@media (max-width: 95rem) {
+  svg {
+    height: 95rem;
+  }
+}
+
+@media (max-width: 94.5rem) {
+  svg {
+    height: 94.5rem;
+  }
+}
+
+@media (max-width: 94rem) {
+  svg {
+    height: 94rem;
+  }
+}
+
+@media (max-width: 93.5rem) {
+  svg {
+    height: 93.5rem;
+  }
+}
+
+@media (max-width: 93rem) {
+  svg {
+    height: 93rem;
+  }
+}
+
+@media (max-width: 92.5rem) {
+  svg {
+    height: 92.5rem;
+  }
+}
+
+@media (max-width: 92rem) {
+  svg {
+    height: 92rem;
+  }
+}
+
+@media (max-width: 91.5rem) {
+  svg {
+    height: 91.5rem;
+  }
+}
+
+@media (max-width: 91rem) {
+  svg {
+    height: 91rem;
+  }
+}
+
+@media (max-width: 90.5rem) {
+  svg {
+    height: 90.5rem;
+  }
+}
+
+@media (max-width: 90rem) {
+  svg {
+    height: 90rem;
+  }
+}
+
+@media (max-width: 89.5rem) {
+  svg {
+    height: 89.5rem;
+  }
+}
+
+@media (max-width: 89rem) {
+  svg {
+    height: 89rem;
+  }
+}
+
+@media (max-width: 88.5rem) {
+  svg {
+    height: 88.5rem;
+  }
+}
+
+@media (max-width: 88rem) {
+  svg {
+    height: 88rem;
+  }
+}
+
+@media (max-width: 87.5rem) {
+  svg {
+    height: 87.5rem;
+  }
+}
+
+@media (max-width: 87rem) {
+  svg {
+    height: 87rem;
+  }
+}
+
+@media (max-width: 86.5rem) {
+  svg {
+    height: 86.5rem;
+  }
+}
+
+@media (max-width: 86rem) {
+  svg {
+    height: 86rem;
+  }
+}
+
+@media (max-width: 85.5rem) {
+  svg {
+    height: 85.5rem;
+  }
+}
+
+@media (max-width: 85rem) {
+  svg {
+    height: 85rem;
+  }
+}
+
+@media (max-width: 84.5rem) {
+  svg {
+    height: 84.5rem;
+  }
+}
+
+@media (max-width: 84rem) {
+  svg {
+    height: 84rem;
+  }
+}
+
+@media (max-width: 83.5rem) {
+  svg {
+    height: 83.5rem;
+  }
+}
+
+@media (max-width: 83rem) {
+  svg {
+    height: 83rem;
+  }
+}
+
+@media (max-width: 82.5rem) {
+  svg {
+    height: 82.5rem;
+  }
+}
+
+@media (max-width: 82rem) {
+  svg {
+    height: 82rem;
+  }
+}
+
+@media (max-width: 81.5rem) {
+  svg {
+    height: 81.5rem;
+  }
+}
+
+@media (max-width: 81rem) {
+  svg {
+    height: 81rem;
+  }
+}
+
+@media (max-width: 80.5rem) {
+  svg {
+    height: 80.5rem;
+  }
+}
+
+@media (max-width: 80rem) {
+  svg {
+    height: 80rem;
+  }
+}
+
+@media (max-width: 79.5rem) {
+  svg {
+    height: 79.5rem;
+  }
+}
+
+@media (max-width: 79rem) {
+  svg {
+    height: 79rem;
+  }
+}
+
+@media (max-width: 78.5rem) {
+  svg {
+    height: 78.5rem;
+  }
+}
+
+@media (max-width: 78rem) {
+  svg {
+    height: 78rem;
+  }
+}
+
+@media (max-width: 77.5rem) {
+  svg {
+    height: 77.5rem;
+  }
+}
+
+@media (max-width: 77rem) {
+  svg {
+    height: 77rem;
+  }
+}
+
+@media (max-width: 76.5rem) {
+  svg {
+    height: 76.5rem;
+  }
+}
+
+@media (max-width: 76rem) {
+  svg {
+    height: 76rem;
+  }
+}
+
+@media (max-width: 75.5rem) {
+  svg {
+    height: 75.5rem;
+  }
+}
+
+@media (max-width: 75rem) {
+  svg {
+    height: 75rem;
+  }
+}
+
+@media (max-width: 74.5rem) {
+  svg {
+    height: 74.5rem;
+  }
+}
+
+@media (max-width: 74rem) {
+  svg {
+    height: 74rem;
+  }
+}
+
+@media (max-width: 73.5rem) {
+  svg {
+    height: 73.5rem;
+  }
+}
+
+@media (max-width: 73rem) {
+  svg {
+    height: 73rem;
+  }
+}
+
+@media (max-width: 72.5rem) {
+  svg {
+    height: 72.5rem;
+  }
+}
+
+@media (max-width: 72rem) {
+  svg {
+    height: 72rem;
+  }
+}
+
+@media (max-width: 71.5rem) {
+  svg {
+    height: 71.5rem;
+  }
+}
+
+@media (max-width: 71rem) {
+  svg {
+    height: 71rem;
+  }
+}
+
+@media (max-width: 70.5rem) {
+  svg {
+    height: 70.5rem;
+  }
+}
+
+@media (max-width: 70rem) {
+  svg {
+    height: 70rem;
+  }
+}
+
+@media (max-width: 69.5rem) {
+  svg {
+    height: 69.5rem;
+  }
+}
+
+@media (max-width: 69rem) {
+  svg {
+    height: 69rem;
+  }
+}
+
+@media (max-width: 68.5rem) {
+  svg {
+    height: 68.5rem;
+  }
+}
+
+@media (max-width: 68rem) {
+  svg {
+    height: 68rem;
+  }
+}
+
+@media (max-width: 67.5rem) {
+  svg {
+    height: 67.5rem;
+  }
+}
+
+@media (max-width: 67rem) {
+  svg {
+    height: 67rem;
+  }
+}
+
+@media (max-width: 66.5rem) {
+  svg {
+    height: 66.5rem;
+  }
+}
+
+@media (max-width: 66rem) {
+  svg {
+    height: 66rem;
+  }
+}
+
+@media (max-width: 65.5rem) {
+  svg {
+    height: 65.5rem;
+  }
+}
+
+@media (max-width: 65rem) {
+  svg {
+    height: 65rem;
+  }
+}
+
+@media (max-width: 64.5rem) {
+  svg {
+    height: 64.5rem;
+  }
+}
+
+@media (max-width: 64rem) {
+  svg {
+    height: 64rem;
+  }
+}
+
+@media (max-width: 63.5rem) {
+  svg {
+    height: 63.5rem;
+  }
+}
+
+@media (max-width: 63rem) {
+  svg {
+    height: 63rem;
+  }
+}
+
+@media (max-width: 62.5rem) {
+  svg {
+    height: 62.5rem;
+  }
+}
+
+@media (max-width: 62rem) {
+  svg {
+    height: 62rem;
+  }
+}
+
+@media (max-width: 61.5rem) {
+  svg {
+    height: 61.5rem;
+  }
+}
+
+@media (max-width: 61rem) {
+  svg {
+    height: 61rem;
+  }
+}
+
+@media (max-width: 60.5rem) {
+  svg {
+    height: 60.5rem;
+  }
+}
+
+@media (max-width: 60rem) {
+  svg {
+    height: 60rem;
+  }
+}
+
+@media (max-width: 59.5rem) {
+  svg {
+    height: 59.5rem;
+  }
+}
+
+@media (max-width: 59rem) {
+  svg {
+    height: 59rem;
+  }
+}
+
+@media (max-width: 58.5rem) {
+  svg {
+    height: 58.5rem;
+  }
+}
+
+@media (max-width: 58rem) {
+  svg {
+    height: 58rem;
+  }
+}
+
+@media (max-width: 57.5rem) {
+  svg {
+    height: 57.5rem;
+  }
+}
+
+@media (max-width: 57rem) {
+  svg {
+    height: 57rem;
+  }
+}
+
+@media (max-width: 56.5rem) {
+  svg {
+    height: 56.5rem;
+  }
+}
+
+@media (max-width: 56rem) {
+  svg {
+    height: 56rem;
+  }
+}
+
+@media (max-width: 55.5rem) {
+  svg {
+    height: 55.5rem;
+  }
+}
+
+@media (max-width: 55rem) {
+  svg {
+    height: 55rem;
+  }
+}
+
+@media (max-width: 54.5rem) {
+  svg {
+    height: 54.5rem;
+  }
+}
+
+@media (max-width: 54rem) {
+  svg {
+    height: 54rem;
+  }
+}
+
+@media (max-width: 53.5rem) {
+  svg {
+    height: 53.5rem;
+  }
+}
+
+@media (max-width: 53rem) {
+  svg {
+    height: 53rem;
+  }
+}
+
+@media (max-width: 52.5rem) {
+  svg {
+    height: 52.5rem;
+  }
+}
+
+@media (max-width: 52rem) {
+  svg {
+    height: 52rem;
+  }
+}
+
+@media (max-width: 51.5rem) {
+  svg {
+    height: 51.5rem;
+  }
+}
+
+@media (max-width: 51rem) {
+  svg {
+    height: 51rem;
+  }
+}
+
+@media (max-width: 50.5rem) {
+  svg {
+    height: 50.5rem;
+  }
+}
+
+@media (max-width: 50rem) {
+  svg {
+    height: 50rem;
+  }
+}
+
+@media (max-width: 49.5rem) {
+  svg {
+    height: 49.5rem;
+  }
+}
+
+@media (max-width: 49rem) {
+  svg {
+    height: 49rem;
+  }
+}
+
+@media (max-width: 48.5rem) {
+  svg {
+    height: 48.5rem;
+  }
+}
+
+@media (max-width: 48rem) {
+  svg {
+    height: 48rem;
+  }
+}
+
+@media (max-width: 47.5rem) {
+  svg {
+    height: 47.5rem;
+  }
+}
+
+@media (max-width: 47rem) {
+  svg {
+    height: 47rem;
+  }
+}
+
+@media (max-width: 46.5rem) {
+  svg {
+    height: 46.5rem;
+  }
+}
+
+@media (max-width: 46rem) {
+  svg {
+    height: 46rem;
+  }
+}
+
+@media (max-width: 45.5rem) {
+  svg {
+    height: 45.5rem;
+  }
+}
+
+@media (max-width: 45rem) {
+  svg {
+    height: 45rem;
+  }
+}
+
+@media (max-width: 44.5rem) {
+  svg {
+    height: 44.5rem;
+  }
+}
+
+@media (max-width: 44rem) {
+  svg {
+    height: 44rem;
+  }
+}
+
+@media (max-width: 43.5rem) {
+  svg {
+    height: 43.5rem;
+  }
+}
+
+@media (max-width: 43rem) {
+  svg {
+    height: 43rem;
+  }
+}
+
+@media (max-width: 42.5rem) {
+  svg {
+    height: 42.5rem;
+  }
+}
+
+@media (max-width: 42rem) {
+  svg {
+    height: 42rem;
+  }
+}
+
+@media (max-width: 41.5rem) {
+  svg {
+    height: 41.5rem;
+  }
+}
+
+@media (max-width: 41rem) {
+  svg {
+    height: 41rem;
+  }
+}
+
+@media (max-width: 40.5rem) {
+  svg {
+    height: 40.5rem;
+  }
+}
+
+@media (max-width: 40rem) {
+  svg {
+    height: 40rem;
+  }
+}
+
+@media (max-width: 39.5rem) {
+  svg {
+    height: 39.5rem;
+  }
+}
+
+@media (max-width: 39rem) {
+  svg {
+    height: 39rem;
+  }
+}
+
+@media (max-width: 38.5rem) {
+  svg {
+    height: 38.5rem;
+  }
+}
+
+@media (max-width: 38rem) {
+  svg {
+    height: 38rem;
+  }
+}
+
+@media (max-width: 37.5rem) {
+  svg {
+    height: 37.5rem;
+  }
+}
+
+@media (max-width: 37rem) {
+  svg {
+    height: 37rem;
+  }
+}
+
+@media (max-width: 36.5rem) {
+  svg {
+    height: 36.5rem;
+  }
+}
+
+@media (max-width: 36rem) {
+  svg {
+    height: 36rem;
+  }
+}
+
+@media (max-width: 35.5rem) {
+  svg {
+    height: 35.5rem;
+  }
+}
+
+@media (max-width: 35rem) {
+  svg {
+    height: 35rem;
+  }
+}
+
+@media (max-width: 34.5rem) {
+  svg {
+    height: 34.5rem;
+  }
+}
+
+@media (max-width: 34rem) {
+  svg {
+    height: 34rem;
+  }
+}
+
+@media (max-width: 33.5rem) {
+  svg {
+    height: 33.5rem;
+  }
+}
+
+@media (max-width: 33rem) {
+  svg {
+    height: 33rem;
+  }
+}
+
+@media (max-width: 32.5rem) {
+  svg {
+    height: 32.5rem;
+  }
+}
+
+@media (max-width: 32rem) {
+  svg {
+    height: 32rem;
+  }
+}
+
+@media (max-width: 31.5rem) {
+  svg {
+    height: 31.5rem;
+  }
+}
+
+@media (max-width: 31rem) {
+  svg {
+    height: 31rem;
+  }
+}
+
+@media (max-width: 30.5rem) {
+  svg {
+    height: 30.5rem;
+  }
+}
+
+@media (max-width: 30rem) {
+  svg {
+    height: 30rem;
+  }
+}
+
+@media (max-width: 29.5rem) {
+  svg {
+    height: 29.5rem;
+  }
+}
+
+@media (max-width: 29rem) {
+  svg {
+    height: 29rem;
+  }
+}
+
+@media (max-width: 28.5rem) {
+  svg {
+    height: 28.5rem;
+  }
+}
+
+@media (max-width: 28rem) {
+  svg {
+    height: 28rem;
+  }
+}
+
+@media (max-width: 27.5rem) {
+  svg {
+    height: 27.5rem;
+  }
+}
+
+@media (max-width: 27rem) {
+  svg {
+    height: 27rem;
+  }
+}
+
+@media (max-width: 26.5rem) {
+  svg {
+    height: 26.5rem;
+  }
+}
+
+@media (max-width: 26rem) {
+  svg {
+    height: 26rem;
+  }
+}
+
+@media (max-width: 25.5rem) {
+  svg {
+    height: 25.5rem;
+  }
+}
+
+@media (max-width: 25rem) {
+  svg {
+    height: 25rem;
+  }
+}
+
+@media (max-width: 24.5rem) {
+  svg {
+    height: 24.5rem;
+  }
+}
+
+@media (max-width: 24rem) {
+  svg {
+    height: 24rem;
+  }
+}
+
+@media (max-width: 23.5rem) {
+  svg {
+    height: 23.5rem;
+  }
+}
+
+@media (max-width: 23rem) {
+  svg {
+    height: 23rem;
+  }
+}
+
+@media (max-width: 22.5rem) {
+  svg {
+    height: 22.5rem;
+  }
+}
+
+@media (max-width: 22rem) {
+  svg {
+    height: 22rem;
+  }
+}
+
+@media (max-width: 21.5rem) {
+  svg {
+    height: 21.5rem;
+  }
+}
+
+@media (max-width: 21rem) {
+  svg {
+    height: 21rem;
+  }
+}
+
+@media (max-width: 20.5rem) {
+  svg {
+    height: 20.5rem;
+  }
+}
+
+@media (max-width: 20rem) {
+  svg {
+    height: 20rem;
+  }
+}
+
+@media (max-width: 19.5rem) {
+  svg {
+    height: 19.5rem;
+  }
+}
+
+@media (max-width: 19rem) {
+  svg {
+    height: 19rem;
+  }
+}
+
+@media (max-width: 18.5rem) {
+  svg {
+    height: 18.5rem;
+  }
+}
+
+@media (max-width: 18rem) {
+  svg {
+    height: 18rem;
+  }
+}
+
+@media (max-width: 17.5rem) {
+  svg {
+    height: 17.5rem;
+  }
+}
+
+@media (max-width: 17rem) {
+  svg {
+    height: 17rem;
+  }
+}
+
+@media (max-width: 16.5rem) {
+  svg {
+    height: 16.5rem;
+  }
+}
+
+@media (max-width: 16rem) {
+  svg {
+    height: 16rem;
+  }
+}
+
+@media (max-width: 15.5rem) {
+  svg {
+    height: 15.5rem;
+  }
+}
+
+@media (max-width: 15rem) {
+  svg {
+    height: 15rem;
+  }
+}
+
+@media (max-width: 14.5rem) {
+  svg {
+    height: 14.5rem;
+  }
+}
+
+@media (max-width: 14rem) {
+  svg {
+    height: 14rem;
+  }
+}
+
+@media (max-width: 13.5rem) {
+  svg {
+    height: 13.5rem;
+  }
+}
+
+@media (max-width: 13rem) {
+  svg {
+    height: 13rem;
+  }
+}
+
+@media (max-width: 12.5rem) {
+  svg {
+    height: 12.5rem;
+  }
+}
+
+@media (max-width: 12rem) {
+  svg {
+    height: 12rem;
+  }
+}
+
+@media (max-width: 11.5rem) {
+  svg {
+    height: 11.5rem;
+  }
+}
+
+@media (max-width: 11rem) {
+  svg {
+    height: 11rem;
+  }
+}
+
+@media (max-width: 10.5rem) {
+  svg {
+    height: 10.5rem;
+  }
+}
+
+@media (max-width: 10rem) {
+  svg {
+    height: 10rem;
+  }
+}
+
+@media (max-width: 9.5rem) {
+  svg {
+    height: 9.5rem;
+  }
+}
+
+@media (max-width: 9rem) {
+  svg {
+    height: 9rem;
+  }
+}
+
+@media (max-width: 8.5rem) {
+  svg {
+    height: 8.5rem;
+  }
+}
+
+@media (max-width: 8rem) {
+  svg {
+    height: 8rem;
+  }
+}
+
+@media (max-width: 7.5rem) {
+  svg {
+    height: 7.5rem;
+  }
+}
+
+@media (max-width: 7rem) {
+  svg {
+    height: 7rem;
+  }
+}
+
+@media (max-width: 6.5rem) {
+  svg {
+    height: 6.5rem;
+  }
+}
+
+@media (max-width: 6rem) {
+  svg {
+    height: 6rem;
+  }
+}
+
+@media (max-width: 5.5rem) {
+  svg {
+    height: 5.5rem;
+  }
+}
+
+@media (max-width: 5rem) {
+  svg {
+    height: 5rem;
+  }
+}
+
+@media (max-width: 4.5rem) {
+  svg {
+    height: 4.5rem;
+  }
+}
+
+@media (max-width: 4rem) {
+  svg {
+    height: 4rem;
+  }
+}
+
+@media (max-width: 3.5rem) {
+  svg {
+    height: 3.5rem;
+  }
+}
+
+@media (max-width: 3rem) {
+  svg {
+    height: 3rem;
+  }
+}
+
+@media (max-width: 2.5rem) {
+  svg {
+    height: 2.5rem;
+  }
+}
+
+@media (max-width: 2rem) {
+  svg {
+    height: 2rem;
+  }
+}
+
+@media (max-width: 1.5rem) {
+  svg {
+    height: 1.5rem;
+  }
+}
+
+@media (max-width: 1rem) {
+  svg {
+    height: 1rem;
+  }
+}
+
+@media (max-width: 0.5rem) {
+  svg {
+    height: 0.5rem;
+  }
+}
+</code></pre></div></div></div><div class="example"><div class="example-code"><div class="code-block"><div class="code-header"><span class="code-language">scss </span><span class="code-description">Within a specific range</span></div><pre data-sassdoc="hljs"><code class="lang-scss">$base: (cap-height: .5);
+svg {
+  @include base-aspect-ratio(1, 25%, $config: (aspect: (from: 3, until: 6, allow: wider)));
+}</code></pre></div><div class="code-block"><div class="code-header"><span class="code-language">css </span><span class="code-description">compiled</span></div><pre data-sassdoc="hljs"><code class="lang-css">svg {
+  height: 3rem;
+}
+
+@media (min-width: 6rem) {
+  svg {
+    height: 1.5rem;
+  }
+}
+
+@media (min-width: 8rem) {
+  svg {
+    height: 2rem;
+  }
+}
+
+@media (min-width: 10rem) {
+  svg {
+    height: 2.5rem;
+  }
+}
+
+@media (min-width: 12rem) {
+  svg {
+    height: 3rem;
+  }
+}
+</code></pre></div></div></div><div class="example"><div class="example-code"><div class="code-block"><div class="code-header"><span class="code-language">scss </span><span class="code-description">Allow a wider aspect-ratio</span></div><pre data-sassdoc="hljs"><code class="lang-scss">$base: (cap-height: .5);
+svg {
+  @include base-aspect-ratio(1, 25%, $config: (aspect: (until: 3, allow: smaller)));
+}</code></pre></div><div class="code-block"><div class="code-header"><span class="code-language">css </span><span class="code-description">compiled</span></div><pre data-sassdoc="hljs"><code class="lang-css">svg {
+  height: 1.5rem;
+}
+
+@media (max-width: 4rem) {
+  svg {
+    height: 1rem;
+  }
+}
+
+@media (max-width: 2rem) {
+  svg {
+    height: 0.5rem;
+  }
+}
+</code></pre></div></div></div></div><div data-item-section="requires"><h3 class="item-subtitle">requires</h3><div class="param-list"><h4 class="param-title"><span class="item-type">@function</span> <span class="item-name">_base-error()</span> <span class="item-note">[private]</span></h4></div><div class="param-list"><h4 class="param-title"><span class="item-type">@function</span> <a href="functions.html#function--base-row" class="item-name">base-row()</a></h4></div><div class="param-list"><h4 class="param-title"><span class="item-type">@function</span> <a href="plugin_convert.html#function--base-convert-size-to-rows" class="item-name">base-convert-size-to-rows()</a></h4></div></div></section></div></main></div></div><script type="text/javascript" src="assets/js/jquery-3.1.1.slim.js"></script><script type="text/javascript" src="assets/js/srcdoc-polyfill.min.js"></script><script type="text/javascript" src="assets/js/highlight.js"></script><script type="text/javascript" src="assets/js/base.js"></script><script type="text/javascript" src="assets/js/init.js"></script></body></html>

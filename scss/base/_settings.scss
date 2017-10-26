@@ -1,25 +1,31 @@
 ////
-///  @group Settings
+///  @group configuration
 ////
 
 //* Base
-/// The grid is defined in a single map variable,
-/// with four initial properties:
-/// `font-size`, `row-height`.
-/// Anything you put in the root `$base` variable map
-/// will be treated as a global project default.
-/// You can create similar configuration maps
-/// under different variable names,
+/// The grid is defined in a single map variable, with four initial properties:
+/// `root-font-size`, `row-height`, `min-line-height` and `math`.
+///
+/// Anything you put in the root `$base` variable map will be treated as a global project default.
+/// You can create similar configuration maps under different variable names,
 /// to override the defaults as-needed.
 ///
 /// @type Map
 ///
-/// @prop {Number} root-font-size   [1rem]	Font-size of the root element
-/// @prop {Number} row-height				[.5]  	Height of each row, generaly 1/2 of the font-size
-/// @prop {Number} min-line-height	[1.2]		Minimum line-height
 /// @prop {Number} cap-height
-/// Cap-height of the used font.
-/// Possible resource https://jamonserrano.github.io/plumber-sass/baselines/
+///   Cap-height of the used font.
+///   Possible resource for looking it up: https://jamonserrano.github.io/plumber-sass/baselines/
+/// @prop {Number} root-font-size   [1rem]	Font-size of the root element
+/// @prop {Number} row-height				[.5]  	Height of each row, generaly &frac12; of the font-size
+/// @prop {Number} min-line-height	[1.2]		Minimum line-height
+/// @prop {String} math
+///   Base can calculate shoulders in 3 types
+///   - `absolute` shoulder is calculated in the unit of the font-size
+///   - `relative` shoulder is calculated in a `em` unit.
+///     This will forces the needed of the correct corresponding font-size.
+///   - `static` a static value that uses a `em` value with the row height and the `calc()` value.
+///   	This removes the need to know the font-size,
+///   	but can result in a shoulder spanning over multiple rows.
 ///
 /// @example scss - Default values
 /// $base: (
@@ -27,11 +33,12 @@
 ///   row-height: .5
 /// );
 ///
-/// @example scss - Example with Segoe UI as font
+/// @example scss - Advanced example with Segoe UI as font
 /// $base: (
 ///   font-size: 1rem,
 ///   row-height: .5,
-///   cap-height: 0.86
+///   cap-height: 0.86,
+///   math: 'static'
 /// );
 $base: () !default;
 
@@ -44,32 +51,33 @@ $base: () !default;
 /// @prop {Number} font-size         [1rem]
 /// @prop {Number} row-height        [.5]
 /// @prop {Number} min-line-height   [1.2]
+/// @prop {String} math              [absolute]
 $_base-settings-defaults: (
 	root-font-size: 1rem,
 	row-height: .5,
-	min-line-height: 1.2
+	min-line-height: 1.2,
+	math: absolute,
+	add-rows-to-line-height: 0
 );
 
 //* Base Settings
 /// Return a combined map of Base settings,
-/// based on `$_base-settings-defaults`, `$base` and
-/// any local map passed into the function.
+/// based on `$_base-settings-defaults`, `$base` and any local map passed into the function.
 ///
 /// @param {maps} $overrides…
-/// Optional map override of global configuration settings.
-/// See `$base` above for properties.
+/// 	Optional map override of global configuration settings.
+/// 	See `$base` above for properties.
 ///
 /// @return {map}
-/// Combined map of Base configuration settings,
-/// in order of specificity:
-/// any `$overrides...`,
-/// then `$base` project settings,
-/// and finally the `$_base-settings-defaults`
+///   Combined map of Base configuration settings, in order of specificity:
+///   any `$overrides...`,
+///   then `$base` project settings,
+///   and finally the `$_base-settings-defaults`
 @function _base-settings($overrides...) {
-	$settings: map-merge($_base-settings-defaults, $base);
+	$settings: _base-map-extend($_base-settings-defaults, $base, true);
 
 	@each $config in $overrides {
-		$settings: map-merge($settings, $config);
+		$settings: _base-map-extend($settings, $config, true);
   }
 
 	@if not map-has-key($settings, "cap-height") {

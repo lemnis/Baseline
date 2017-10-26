@@ -1,10 +1,12 @@
-/// Syntax Utilities for Extending Base
-
 // Compile shorthand
 @function _base-compile($short, $config) {
+	@if $short == null {
+		$short: ();
+	}
+
 	// Get and normalize config
 	$config: _base-settings($config);
-	// $normal-config: _base-normalize($config);
+	$normal-config: _base-normalize($config);
 
 	// Parse and normalize shorthand
 	@if (type-of($short) != "map") and (length($short) > 0) {
@@ -14,5 +16,5 @@
 	$normal-short: _base-normalize($short);
 
 	// Merge and return
-	@return map-merge($config, $normal-short);
+	@return map-merge($normal-config, $normal-short);
 }

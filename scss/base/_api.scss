@@ -1,21 +1,263 @@
-//*
-///  Calculates the height of a single row
-///  @param  {Map} $config [$base]	Config map
-///  @return {Number}         			Row height in unit of the root font-size		
 ////
-@function base-row($config: $base) {
-	$config: _base-compile((), $config);
+///  relative is limited to shoulders and could overlap over multiple rows
+///
+///  @group functions
+////
 
-	// @if type-of($rows) == map {
-	// 	// $config is given as first param
-	// 	// reset default rows
-	// 	$rows: 1;
-	// } @else {
-	// 	$rows: 					map-get($config, "add-rows-to-line-height");
-	// }
+/// Base API Functions
+/// =======
+/// Base has 5 functions that form the core of Base vertical grid API.
+///
+/// All five functions come with an unprefixed alias by default, using the `base` import.
+/// Import the `base-prefix` partial instead, if you only only want prefixed versions of the API.
+///
+/// ## Text functions
+/// - Use `line-height()`, `top()` and `bottom()` to set text on the baseline
+///   and apply the results wherever you need them:
+///   CSS `line-height`, `margin`, `padding`, etc.
+/// - Use `font-size()` to get the default font-size
+///
+///	@see base-font-size
+///	@see base-line-height
+///	@see base-top
+///	@see base-bottom
+///
+/// @example scss - Basic text usage
+/// 	$base: (cap-height: .7);
+///   h1 {
+///     $font-size: 2rem;
+///     font-size: $font-size;
+///     line-height: line-height($font-size);
+///     margin-top: top($font-size);
+///     margin-bottom: bottom($font-size);
+///   }
+
+///	## Row function
+/// Use `row()` to set a add a specific height to a element
+///
+/// @see base-row
+///
+/// @example scss - Specific height
+/// 	$base: (cap-height: .7);
+///   .foo {
+///     height: row(3);
+///   }
+/// @example scss - Text with added white space
+/// 	$base: (cap-height: .7);
+///   h1 {
+///     $font-size: 2rem;
+///     font-size: $font-size;
+///     line-height: line-height($font-size);
+///     margin-top: top($font-size) + row(3);
+///     margin-bottom: bottom($font-size) + row(2);
+///   }
+
+//* Base Line-height
+/// Returns the line-height that is needed to maintain the text on the baseline.
+///
+/// The un-prefixed alias `line-height()` is available by default.
+///
+/// @param {list|number} $short [null] -
+///   Shorthand expression to define the current text properties,
+///   optionally containing:
+///   - a unit number, current font-size
+///   - a unitless number, extra rows to add per text line
+/// @param {Map} $config [$base] -
+///   Optional map of Base configuration settings.
+///   See `$base` documentation for details.
+///
+/// @return {length}	Calculated line-height in a unitless number
+///
+/// @example scss - line-height of default font-size
+///   $base: (cap-height: .5);
+///   .foo {
+///     line-height: line-height();
+///   }
+/// @example scss - normal usage
+///   $base: (cap-height: .5);
+///   .foo {
+///     $font-size: 2rem;
+///     line-height: line-height($font-size);
+///   }
+@function base-line-height($short: null, $config: $base) {
+	$config: _base-compile($short, $config);
+
+	@return _base-get-line-height($config);
+}
+
+//* Base Top
+/// Used to return the top offset needed for given font-size
+/// to maintain the baseline grid
+///
+/// The un-prefixed alias `top()` is available by default.
+///
+/// @param {list|number} $short [null] -
+///   Shorthand expression to define the current text properties,
+///   optionally containing:
+///   - a unit number, current font-size
+///   - a unitless number, extra rows to add per text line
+///   - `static`, `relative` or `absolute` for a specific math method
+/// @param {Map} $config [$base] -
+///   Optional map of Base configuration settings.
+///   See `$base` documentation for details.
+///
+/// @return {length}	Calculated top shoulder
+///
+/// @example scss - top shoulder of default font-size
+///   $base: (cap-height: .5);
+///   .foo {
+///     padding-top: top();
+///   }
+/// @example scss - normal usage
+///   $base: (cap-height: .5);
+///   .foo {
+///     $font-size: 2rem;
+///     padding-top: top($font-size);
+///   }
+@function base-top($short: null, $config: $base) {
+	$config: _base-compile($short, $config);
+
+	$font-size:   map-get($config, "font-size");
+	$cap-height:  map-get($config, "cap-height");
+	$math: 				map-get($config, "math");
+
+	$line-height: _base-get-line-height($config);
+	$calc-row-height: base-row($config);
+
+	@if $math == "static" {
+		@return _base-math-shoulder-top(1em, $line-height, $cap-height);
+	} @else {
+		$shoulder: _base-math-shoulder-top($font-size, $line-height, $cap-height);
+		@if $math == "relative" {
+			@return ($shoulder % $calc-row-height) / $font-size * 1em;
+		} @else if $math == "absolute" {
+			@return $shoulder % $calc-row-height;
+		}
+	}
+}
+
+//* Base Bottom
+/// Used to return the bottom offset needed for given font-size
+/// to maintain the baseline grid
+///
+/// The un-prefixed alias `bottom()` is available by default.
+///
+/// @param {list|number} $short [null] -
+///   Shorthand expression to define the current text properties,
+///   optionally containing:
+///   - a unit number, current font-size
+///   - a unitless number, extra rows to add per text line
+///   - `static`, `relative` or `absolute` for a specific math method
+/// @param {Map} $config [$base] -
+///   Optional map of Base configuration settings.
+///   See `$base` documentation for details.
+///
+/// @return {length}	Calculated line-height
+///
+/// @example scss - bottom shoulder of default font-size
+///   $base: (cap-height: .5);
+///   .foo {
+///     padding-bottom: bottom();
+///   }
+/// @example scss - normal usage
+///   $base: (cap-height: .5);
+///   .foo {
+///     $font-size: 2rem;
+///     padding-bottom: bottom($font-size relative);
+///   }
+@function base-bottom($short: null, $config: $base) {
+	$config: _base-compile($short, $config);
+
+	$cap-height: 			map-get($config, "cap-height");
+	$font-size: 			map-get($config, "font-size");
+	$root-font-size: 	map-get($config, "root-font-size");
+	$row-height: 			map-get($config, "row-height");
+	$math: 						map-get($config, "math");
+
+	$line-height: 		_base-get-line-height($config);
+	$calc-row-height: base-row($config);
+
+	@if $math == "static" {
+		@return calc(#{$calc-row-height} - #{_base-math-shoulder-top(1em, $line-height, $cap-height)});
+	} @else {
+		$shoulder: _base-math-shoulder-bottom(
+			$font-size, $line-height, $root-font-size, $row-height, $cap-height
+		);
+		@if $math == "relative" {
+			@return ($shoulder % $calc-row-height) / $font-size * 1em;
+		} @else if $math == "absolute" {
+			@return $shoulder % $calc-row-height;
+		}
+	}
+}
+
+//* Base Font-size
+/// It returns the extracted font-size from the shorthand,
+/// if non given it will fallback on the base font-size.
+///
+/// The un-prefixed alias `font-size()` is available by default.
+///
+/// @param {list|number} $short [null] -
+///   Shorthand expression to define the current text properties,
+///   optionally containing:
+///   - a unit number, current font-size
+/// @param {Map} $config [$base] -
+///   Optional map of Base configuration settings.
+///   See `$base` documentation for details.
+///
+/// @return {length}	Raw font-size
+///
+///	@example css - proposed usage
+///	  .foo {
+///	    $font-size: 2rem;
+///	    font-size: $font-size;
+///	  }
+/// @example scss - default font-size
+///   $base: (cap-height: .5);
+///   .foo {
+///     font-size: font-size();
+///   }
+/// @example scss - specific font-size
+///   $base: (cap-height: .5);
+///	  .foo {
+///	    font-size: font-size(2rem);
+///	  }
+@function base-font-size($short: null, $config: $base) {
+	$config: _base-compile($short, $config);
+
+	@return map-get($config, "font-size");
+}
+
+//* Base row
+/// Returns the height of a certain amount of rows
+/// @param  {Number} $rows   [1]           Number of rows to span
+/// @param {Map} $config [$base] -
+///   Optional map of Base configuration settings.
+///   See `$base` documentation for details.
+///
+/// @return {Number}         Height to span given rows
+///
+/// @example scss - single row
+///   $base: (cap-height: .5);
+///   .foo {
+///     height: row();
+///   }
+/// @example scss - a specific amount of rows
+///   $base: (cap-height: .5);
+///   .foo {
+///     height: row(3);
+///   }
+@function base-row($rows: 1, $config: $base) {
+	@if type-of($rows) == map {
+		// a $config map is given as first param, reset default rows
+		$config: _base-compile((), $rows);
+		$rows: 1;
+	} @else {
+		$config: _base-compile((), $config);
+	}
 
 	$root-font-size: 	map-get($config, "root-font-size");
 	$row-height: 			map-get($config, "row-height");
 
-	@return _base-math-row-height(1, $row-height, $root-font-size);
+	@return _base-math-row-height($rows, $row-height, $root-font-size);
 }

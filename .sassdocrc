@@ -1,11 +1,19 @@
+theme: Herman
 dest: docs/
 
 display:
-  # access: public
+  access: public
 
 package: ./package.json
 verbose: true
 groups:
-  Settings: 'Configuration'
-  text: 'Text Functions'
-  debug: 'Debug Functions'
+  configuration: 'Configuration'
+  functions: 'Functions'
+  plugin_aspect: 'Plugin: Aspect Ratio'
+  plugin_debug: 'Plugin: Debug Image'
+  plugin_convert: 'Plugin: Convert Size'
+
+herman:
+  sass:
+    includepaths: ['scss']
+    includes: ['base']

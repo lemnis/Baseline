@@ -1,0 +1,26 @@
+////
+///  @group plugin_convert
+////
+
+//* Base rows of given size
+/// Calculates amount of rows needed to fit a given size
+///
+/// @param  {Number} $size   Size to convert
+/// @param  {Map} 	 $config [$base] -
+///   Optional map of Base configuration settings.
+///   See `$base` documentation for details.
+/// @return {Number}         Unitless value representing size in rows
+///
+/// @example scss
+///   $base: (cap-height: .5);
+///   .foo {
+///     height: row() * base-convert-size-to-rows(3rem);
+///   }
+@function base-convert-size-to-rows($size, $config: $base) {
+	$config: _base-compile((), $config);
+
+	$root-font-size: map-get($config, "root-font-size");
+	$row-height: map-get($config, "row-height");
+
+	@return $size / _base-math-row-height(1, $row-height, $root-font-size);
+}

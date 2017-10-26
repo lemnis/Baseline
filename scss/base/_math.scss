@@ -47,8 +47,26 @@
 
 	// calculate minimum amount of rows given by the minimum line-height
 	$rows-line-height: ceil(($min-line-height * $font-size / $root-font-size));
+	// @return $rows-line-height;
+	@return if($total-rows < $rows-line-height, $rows-line-height, $total-rows);
+}
 
-	@return if($rows-font-size < $rows-line-height, $rows-line-height, $rows-font-size);
+//* Base math line-height
+/// Calculates the line-height with set font-size and given rows
+///
+/// @param {number} $rows 			Amount of rows used
+/// @param {number} $font-size 		Font-size used
+/// @param {number} $root-font-size 	Base font-size
+/// @param {number} $row-height	Row height
+///
+/// @return {number} 				Unitless line-height
+@function _base-math-line-height(
+	$rows,
+	$font-size,
+	$root-font-size,
+	$row-height
+){
+	@return _base-math-row-height($rows, $row-height, $root-font-size) / $font-size;
 }
 
 //* Base math shoulder top
@@ -86,38 +104,22 @@
 ){
 	@if not _base-valid-unit($font-size, $root-font-size) {
 		@return _base-error(
-			"Can't calculate rhythm with 2 different units, " +
-			unit($font-size) + "*" unit($root-font-size),
+			"Can't calculate rhythm with 2 different units, " + unit($font-size) + "*" unit($root-font-size),
 			"_base-math-shoulder-bottom"
 		);
 	}
+
 	$row-height: _base-math-row-height(1, $root-font-size, $row-height);
 	$shoulder-height: _base-math-shoulder-top($font-size, $line-height, $cap-height);
 
 	// Height in use, 1 row of text + top shoulder
 	$used-height: $line-height * $font-size + $shoulder-height;
+
 	// Row height minus the used height that overlaps less than 1 row (remainder)
 	$remainder: ($used-height % $row-height);
+
 	// if nothing is remaining remove the full row
 	$height-to-remove: if($remainder == 0, $row-height, $remainder);
 
 	@return $row-height - $height-to-remove;
-}
-
-//* Base math line-height
-/// Calculates and returns the line-height with set font-size and given rows
-///
-/// @param {number} $rows 			Amount of rows used
-/// @param {number} $font-size 		Font-size used
-/// @param {number} $root-font-size 	Base font-size
-/// @param {number} $row-height	Row height
-///
-/// @return {number} 				Unitless line-height
-@function _base-math-line-height(
-	$rows,
-	$font-size,
-	$root-font-size,
-	$row-height
-){
-	@return _base-math-row-height($rows, $row-height, $root-font-size) / $font-size;
 }

@@ -9,6 +9,9 @@
 @import "base/syntax-helpers";
 
 // API functions
-@import "base/api-debug";
-@import "base/api-text";
 @import "base/api";
+
+// Plugins
+@import "plugins/convert";
+@import "plugins/aspect";
+@import "plugins/debug";

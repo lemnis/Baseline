@@ -1,0 +1,40 @@
+////
+///  @group plugin_debug
+////
+
+//* Base Debug Defaults
+/// This plugin adds the `debug-colors` property and default value to `$_base-settings-defaults` —
+/// you can override that value in `$base` or any other grid settings map.
+/// @type {map}
+$_base-settings-defaults: map-merge((debug-colors: transparent #0EF), $_base-settings-defaults);
+
+//* Base Debug Image
+/// Generates a debug image
+///
+/// @param {Map} $config [$base] -
+///   Optional map of Base configuration settings.
+///   See `$base` documentation for details.
+///
+/// @return {Linear-gradient}      A linear-gradient that displays the grid
+///
+/// @example scss
+///   $base: (cap-height: .5);
+///   body{
+///     background-image: base-debug-image();
+///   }
+@function base-debug-image($config: $base) {
+	$config: _base-compile((), $config);
+
+	$root-font-size: 	map-get($config, "root-font-size");
+	$row-height: 			map-get($config, "row-height");
+	$debug-colors:    map-get($config, "debug-colors");
+
+	$calc-row-height: _base-math-row-height(1, $row-height, $root-font-size);
+
+	@return repeating-linear-gradient(to bottom,
+		nth($debug-colors, 1) 0,
+		nth($debug-colors, 1) calc(#{$calc-row-height} - 1px),
+		nth($debug-colors, 2) calc(#{$calc-row-height} - 1px),
+		nth($debug-colors, 2) $calc-row-height
+  );
+}

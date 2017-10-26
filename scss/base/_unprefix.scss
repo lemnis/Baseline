@@ -1,38 +1,29 @@
 //*  Font-size
-///  @alias root-font-size
-///  @param  {List} $short
-///  @param  {Map} 	$config
-@function font-size($short, $config: $base) {
-	@return root-font-size($short, $config);
+///  @alias base-font-size
+@function font-size($short: null, $config: $base) {
+	@return base-font-size($short, $config);
 }
 
 //*  Line-height
 ///  @alias base-line-height
-///  @param  {List} $short
-///  @param  {Map} 	$config
-@function line-height($short, $config: $base) {
+@function line-height($short: null, $config: $base) {
 	@return base-line-height($short, $config);
 }
 
 //*  Top
 ///  @alias base-top
-///  @param  {List} $short
-///  @param  {Map} 	$config
-@function top($short, $config: $base) {
+@function top($short: null, $config: $base) {
 	@return base-top($short, $config);
 }
 
 //*  Bottom
 ///  @alias base-bottom
-///  @param  {List} $short
-///  @param  {Map} 	$config
-@function bottom($short, $config: $base) {
+@function bottom($short: null, $config: $base) {
 	@return base-bottom($short, $config);
 }
 
 //*  Row
 ///  @alias base-row
-///  @param  {Map} $config [$base]
-@function row($config: $base) {
-	@return base-row($short, $config);
+@function row($rows: 1, $config: $base) {
+	@return base-row($rows, $config);
 }
